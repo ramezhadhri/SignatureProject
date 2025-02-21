@@ -1,14 +1,15 @@
 <template>
-  <div class="pdf-container">
-    <p>page:{{ currentpage }} positionx:{{ mouseX }} positionY:{{ mouseY }}</p>
+  <div class="px-20 grid grid-cols-6 gap-2">
+    <div class="block col-span-4">
+     
 
-    <canvas ref="canvasRef" @click="mousePos"></canvas>
-    <div class=" flex flex-col items-center jutify-center  my-4">
-    
-
-      <div class="flex  items-center jutify-center ">
-        <button
-          @click="prevPage" :disabled="currentpage <= 1"  class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      <canvas ref="canvasRef" @click="mousePosAndAddSignature"></canvas>
+      <div class="flex flex-col items-center jutify-center my-4">
+        <div class="flex items-center jutify-center">
+          <button
+            @click="prevPage"
+            :disabled="currentpage <= 1"
+            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             <svg
               class="w-3.5 h-3.5 me-2 rtl:rotate-180"
@@ -25,19 +26,18 @@
                 d="M13 5H1m0 0 4 4M1 5l4-4"
               />
             </svg>
-            
           </button>
-          <span class="text-sm text-gray-700 ">
-          Page
-          <span class="font-semibold text-gray-900 ">{{ currentpage }}</span> Sur
-          <span class="font-semibold text-gray-900 ">{{ totalpages }}</span> 
-         
-          
-        </span>
+          <span class="text-sm text-gray-700">
+            Page
+            <span class="font-semibold text-gray-900">{{ currentpage }}</span>
+            Sur
+            <span class="font-semibold text-gray-900">{{ totalpages }}</span>
+          </span>
           <button
-          @click="nextPage" :disabled="currentpage >= totalpages " class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            @click="nextPage"
+            :disabled="currentpage >= totalpages"
+            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
-           
             <svg
               class="w-3.5 h-3.5 ms-2 rtl:rotate-180"
               aria-hidden="true"
@@ -54,14 +54,52 @@
               />
             </svg>
           </button>
-    
-       
+        </div>
       </div>
-    
+    </div>
+    <div class="signataires-view col-span-2">
+      <div class="signataires-view mt-6 p-4 bg-gray-100 rounded-md">
+        <h3 class="text-lg font-semibold mb-2">Choisissez un signataire :</h3>
+        <select v-model="selectedSignataire" class="w-full p-2 border rounded">
+          <option
+            v-for="signataire in signataireView"
+            :key="signataire.email"
+            :value="signataire"
+          >
+            {{ signataire.nom }} {{ signataire.prenom }}
+          </option>
+        </select>
+        <p v-if="selectedSignataire" class="mt-2 text-gray-700">
+          Email: {{ selectedSignataire.email }}
+        </p>
+      </div>
+      <div class="bg-gray-100 border rounded mt-6 p-4">
+        <h3 class="text-lg font-semibold mb-2">Signatures enregistrées :</h3>
+        <div
+          v-for="(signature, email) in signaturePositions"
+          :key="email"
+          class="border rounded p-2 mb-2 bg-white shadow flex"
+        >
+          <div class="mx-2">
+            <p class="font-semibold">
+              Signataire: {{ signature.nom }} {{ signature.prenom }}
+            </p>
+
+            <p class="font-semibold">Page: {{ signature.page }}</p>
+          </div>
+          <button
+            @click="removeSignature(signature.email, signature.x, signature.y)"
+            class="px-2 py-1 text-sm text-white bg-red-500 rounded"
+          >
+            Supprimer
+          </button>
+        </div>
+      </div>
+      <!-- <pre class="mt-4 p-3 bg-gray-100 border rounded">{{ signaturePositions }}</pre> -->
     </div>
   </div>
-  
-    <!-- <pre class="mt-4 p-3 bg-gray-100 border rounded">{{ signataireView }}</pre> -->
+
+  <!-- <pre class="mt-4 p-3 bg-gray-100 border rounded">{{ signaturePositions }}</pre> -->
 </template>
 
 <script>
@@ -87,6 +125,7 @@ export default {
       mouseX: 0,
       mouseY: 0,
       signataireView: [],
+      signaturePositions: [],
     };
   },
   mounted() {
@@ -96,19 +135,42 @@ export default {
     this.loadSignataires();
   },
   methods: {
-    mousePos(event) {
-      const rect = this.canvas.getBoundingClientRect(); //retourne les dimension relle de canva
-      const scaleX = this.canvas.width / rect.width; //corrige la deffirence entre canva etpdf retourné
+   
+    removeSignature(email, x, y) {
+  console.log("Removing signature for email:", email, "x:", x, "y:", y);
+  this.signaturePositions = this.signaturePositions.filter(
+    (signature) =>
+      signature.email !== email || signature.x !== x || signature.y !== y
+  );
+  console.log("Updated signature positions:", this.signaturePositions);
+},
+
+    mousePosAndAddSignature(event) {
+      const rect = this.canvas.getBoundingClientRect();
+      const scaleX = this.canvas.width / rect.width;
       const scaleY = this.canvas.height / rect.height;
 
-      const pdfX = (event.clientX - rect.left) * scaleX;
-      const pdfY = this.canvas.height - (event.clientY - rect.top) * scaleY;
+      this.mouseX = ((event.clientX - rect.left) * scaleX).toFixed(2);
+      this.mouseY = (
+        this.canvas.height -
+        (event.clientY - rect.top) * scaleY
+      ).toFixed(2);
 
-      this.mouseX = pdfX.toFixed(2);
-      this.mouseY = pdfY.toFixed(2);
+      if (this.selectedSignataire) {
+        this.signaturePositions.push({
+          email: this.selectedSignataire.email,
+          nom: this.selectedSignataire.nom,
+          prenom: this.selectedSignataire.prenom,
+          page: this.currentpage,
+          x: this.mouseX,
+          y: this.mouseY,
+        });
+        console.log("Signature added:", this.signaturePositions);
+        this.$emit("signature-positions", this.signaturePositions);
+      }
     },
-    async loadSignataires(){
-if (this.signataires && Array.isArray(this.signataires)) {
+    async loadSignataires() {
+      if (this.signataires && Array.isArray(this.signataires)) {
         this.signataireView = this.signataires;
       } else {
         console.error("No signataires provided or incorrect format.");

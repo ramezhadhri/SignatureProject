@@ -376,7 +376,7 @@
                 </button>
               </p>
 
-              <pre class="mt-4 p-3 bg-gray-100 border rounded">{{ signataires }}</pre>
+              
             </div>
           </div>
         </div>
@@ -499,7 +499,7 @@
                 Positionnez les signatures
               </h1>
             </div>
-            <div class="my-4 w-1/2 flex flex-col ">
+            <div class="my-4 w-full flex flex-col  ">
               <pdfview 
         :signataires="signataires" 
         :base64pdf="base64pdf"
@@ -628,12 +628,74 @@
           </div>
           <div class="block">
             <div class="mx-8">
-              <h1 class="text-start text-2xl font-bold">
+              <h1 class="text-center text-2xl font-bold">
                 Demandez une signature
               </h1>
             </div>
-            <div class="mx-8 my-4 flex items-center">
+            <div class="mx-8 my-4 flex  flex-col justify-center items-center">
               <!-- ramezhadhri -->
+              <div class="border rounded-lg overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-neutral-700">
+                    <tr>
+                      <th
+                        class="px-6 py-3 text-start text-xs font-medium text-gray-100 uppercase"
+                      >
+                        Document 
+                      </th>
+                      <th
+                        class="px-6 py-3 text-start text-xs font-medium text-gray-100 uppercase"
+                      >
+                        Nom signataire
+                      </th>
+                      <th
+                        class="px-6 py-3 text-start text-xs font-medium text-gray-100 uppercase"
+                      >
+                        Prenom signataire
+                      </th>
+                      <th
+                        class="px-6 py-3 text-start text-xs font-medium text-gray-100 uppercase"
+                      >
+                        Email Signataire
+                      </th>
+                     
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200">
+                    <tr v-for="(row, index) in signataires" :key="index">
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800"
+                      >
+                       {{fileName}}
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
+                      >
+                        {{ row.nom }}
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
+                      >
+                       {{ row.prenom }}
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+                      >
+                        
+                       {{ row.email }}
+                      </td>
+                     
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <button
+        class="py-3 px-4  my-8 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#2563eb] text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+     
+      >
+      envoyer 
+       
+      </button> 
             </div>
           </div>
         </div>
@@ -705,7 +767,7 @@ export default {
     return {
       currentStep: 0,
      
-    
+      fileName:"",
       base64pdf:"",
       signataires: [{ prenom: "", nom: "", email: "", mobile: "" }],
       steps: [
@@ -714,7 +776,7 @@ export default {
         { id: "step-2" },
         { id: "step-3" },
       ],
-      signaturePositions: [],
+      signatures: [],
     };
   },
 
@@ -722,14 +784,14 @@ export default {
   methods: {
 
     handleSignaturePositions(positions) {
-      this.signaturePositions = positions;
-      console.log("Received Signature Positions:", positions);
-    },
+    this.signatures = positions;
+    console.log("Received Signature Positions:", positions);
+  },
     async handlepdf(events){ const file = events.target.files[0];
 
 if (file && file.type === "application/pdf") {
   const reader = new FileReader();
-
+  this.fileName = file.name;
   reader.onload = async (e) => {
     this.base64pdf = e.target.result.split(",")[1];
     
@@ -767,17 +829,4 @@ if (file && file.type === "application/pdf") {
 };
 </script>
 
-<style scoped>
-.stepper-container {
-  text-align: center;
-  padding: 20px;
-}
-.buttons {
-  margin-top: 20px;
-}
-button {
-  margin: 5px;
-  padding: 10px;
-  cursor: pointer;
-}
-</style>
+
