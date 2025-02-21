@@ -376,7 +376,7 @@
                 </button>
               </p>
 
-              <!-- <pre class="mt-4 p-3 bg-gray-100 border rounded">{{ signataires }}</pre> -->
+              <pre class="mt-4 p-3 bg-gray-100 border rounded">{{ signataires }}</pre>
             </div>
           </div>
         </div>
@@ -493,22 +493,23 @@
             </ul>
             <!-- End Stepper -->
           </div>
-          <div class="block">
-            <div class="mx-8">
+          <div class="block border-t border-t-4 border-black">
+            <div class="my-8">
               <h1 class="text-center text-2xl font-bold">
                 Positionnez les signatures
               </h1>
             </div>
-            <div class="my-4 w-2/3 flex flex-col ">
-              <button @click="loadPdf">affixher pdf</button>
-              <canvas ref="canvasRef" class="border border-4 border-black"></canvas>
-              <div class="flex items-center">
-                <button @click="prevPage" :disabled="pagenum <= 1">Prev</button>
-                <p id="pageNumber">Page {{ pagenum }} of {{ totalpages }}</p>
-                <button @click="nextPage" :disabled="pagenum >= totalpages">
-                  Next
-                </button>
-              </div>
+            <div class="my-4 w-1/2 flex flex-col ">
+              <pdfview 
+        :signataires="signataires" 
+        :base64pdf="base64pdf"
+        @signature-positions="handleSignaturePositions"
+      />
+      <!-- <pdfview 
+        
+        :base64pdf="base64pdf"
+        
+      /> -->
             </div>
           </div>
         </div>
@@ -690,21 +691,21 @@
 
 
 <script>
+import pdfview from "../components/pdfview.vue";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf";
 import pdfWorker from "pdfjs-dist/legacy/build/pdf.worker?url";
+import Pdfview from "../components/pdfview.vue";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 export default {
   name: "DemandeSignature",
+  components: {
+    pdfview,
+  },
   data() {
     return {
       currentStep: 0,
-      pdfData: null,
-      pagenum: 1,
-      totalpages: 1,
-      scale: 1,
-      canvas: null,
-      ctx: null,
-      pdf: null,
+     
+    
       base64pdf:"",
       signataires: [{ prenom: "", nom: "", email: "", mobile: "" }],
       steps: [
@@ -713,15 +714,18 @@ export default {
         { id: "step-2" },
         { id: "step-3" },
       ],
+      signaturePositions: [],
     };
   },
- mounted(){
-  
-    
- },
+
 
   methods: {
-    async handlepdf(events){ const file = event.target.files[0];
+
+    handleSignaturePositions(positions) {
+      this.signaturePositions = positions;
+      console.log("Received Signature Positions:", positions);
+    },
+    async handlepdf(events){ const file = events.target.files[0];
 
 if (file && file.type === "application/pdf") {
   const reader = new FileReader();
@@ -732,7 +736,7 @@ if (file && file.type === "application/pdf") {
    
 
     console.log(this.base64pdf);
-    await this.loadPdf();
+    
     
   };
 
@@ -741,58 +745,7 @@ if (file && file.type === "application/pdf") {
   console.error("Invalid file type. Please upload a PDF.");
 }},
 
-async loadPdf() {
-      try {
-        this.canvas = this.$refs.canvasRef;
-    this.ctx = this.canvas.getContext("2d");
-        //convertir chanine de base 64 to chaine binaire
-        this.pdfData = atob(this.base64pdf);
-        console.log("base64 to atob"+this.pdfData)
-        pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
-        const pdf = await pdfjsLib.getDocument({ data: this.pdfData }).promise;
-        this.totalpages = pdf.numPages;
-        await this.renderPage(pdf, this.pagenum);
-      } catch (error) {
-        console.error("Error loading PDF:", error);
-      }
-    },
-
-    async renderPage(pdf, pageNumber) {
-      try {
-        const page = await pdf.getPage(pageNumber);
-
-        if (!page) {
-          console.warn(`Page ${pageNumber} not available.`);
-          return;
-        }
-
-        const viewport = page.getViewport({ scale: this.scale });
-
-        this.canvas.height = viewport.height;
-        this.canvas.width = viewport.width;
-
-        const renderContext = {
-          canvasContext: this.ctx,
-          viewport: viewport,
-        };
-
-        await page.render(renderContext).promise;
-        console.log(`Page ${pageNumber} rendered`);
-      } catch (error) {
-        console.error(`Error rendering page ${pageNumber}:`, error);
-      }
-    },
-    async prevPage() {
-      this.pagenum--;
-      const pdf = await pdfjsLib.getDocument({ data: this.pdfData }).promise;
-      this.renderPage(pdf, this.pagenum);
-    },
-    async nextPage() {
-      this.pagenum++;
-      const pdf = await pdfjsLib.getDocument({ data: this.pdfData }).promise;
-      this.renderPage(pdf, this.pagenum);
-    },
     nextStep() {
       if (this.currentStep < this.steps.length - 1) {
         this.currentStep++;
