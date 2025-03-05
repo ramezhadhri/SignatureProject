@@ -1,61 +1,62 @@
 <template>
   <div class="px-20 grid grid-cols-6 gap-2">
     <div class="block col-span-4">
-      <canvas ref="canvasRef" class="border border-black border-2"></canvas>
-      <div class="flex flex-col items-center jutify-center my-4">
-        <div class="flex items-center jutify-center">
-          <button
-            @click="prevPage"
-            :disabled="currentpage <= 1"
-            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      <div class="flex items-center justify-start my-2 ml-32 ">
+        <button
+          @click="prevPage"
+          :disabled="currentpage <= 1"
+          class="flex items-center justify-center px-3 h-8"
+        >
+          <svg
+            class="w-6 h-6 text-gray-800"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
           >
-            <svg
-              class="w-3.5 h-3.5 me-2 rtl:rotate-180"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 5H1m0 0 4 4M1 5l4-4"
-              />
-            </svg>
-            Précédent
-          </button>
-          <span class="text-sm text-gray-700">
-            Page
-            <span class="font-semibold text-gray-900">{{ currentpage }}</span>
-            Sur
-            <span class="font-semibold text-gray-900">{{ totalpages }}</span>
-          </span>
-          <button
-            @click="nextPage"
-            :disabled="currentpage >= totalpages"
-            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m17 16-4-4 4-4m-6 8-4-4 4-4"
+            />
+          </svg>
+        </button>
+        <span class="text-sm text-gray-700 mx-4">
+          Page
+          <span class="font-semibold text-gray-900">{{ currentpage }}</span>
+          Sur
+          <span class="font-semibold text-gray-900">{{ totalpages }}</span>
+        </span>
+        <button
+          @click="nextPage"
+          :disabled="currentpage >= totalpages"
+          class="flex items-center justify-center px-3 h-8"
+        >
+          <svg
+            class="w-6 h-6 text-gray-800"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
           >
-            <svg
-              class="w-3.5 h-3.5 ms-2 rtl:rotate-180"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              />
-            </svg>
-            Suivant
-          </button>
-        </div>
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m7 16 4-4-4-4m6 8 4-4-4-4"
+            />
+          </svg>
+        </button>
       </div>
+      <canvas ref="canvasRef" class="border border-black border-2"></canvas>
+      
     </div>
     <div class="signataires-view col-span-2">
       <div class="signataires-view mt-6 p-4 bg-gray-100 rounded-md">
@@ -105,11 +106,22 @@
           @mouseup="stopDrag"
           ref="draggableDiv"
         >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
-</svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+            />
+          </svg>
 
-          <h1> signature</h1>
+          <h1>signature</h1>
         </div>
         <button
           @click="mousePosAndAddSignature"
@@ -133,7 +145,7 @@
           Ajouter Cette Signature
         </button>
 
-        <p>x:{{ mouseX }} y:{{ mouseY }}</p>
+        <!-- <p>x:{{ mouseX }} y:{{ mouseY }}</p> -->
       </div>
     </div>
   </div>
@@ -181,7 +193,7 @@ export default {
         right: "50px",
         cursor: "grab",
       },
-      selectedSignataire: null,  
+      selectedSignataire: null,
     };
   },
   mounted() {
@@ -189,24 +201,20 @@ export default {
     this.ctx = this.canvas.getContext("2d");
     this.loadPdf(this.base64pdf);
     this.loadSignataires();
-    this.expliquer();
+    
   },
   watch: {
     signataireView: {
-      immediate: true,  
+      immediate: true,
       handler(newSignataireView) {
         if (newSignataireView && newSignataireView.length > 0) {
-          this.selectedSignataire = newSignataireView[0];  
+          this.selectedSignataire = newSignataireView[0];
         }
       },
     },
   },
   methods: {
-    expliquer() {
-      alert(
-        "Pour ajouter une signature, vous devez:\n 1: Choisir un destinataire\n 2: Placer une signature\n 3: Cliquez sur Ajouter pour enregistrer cette position"
-      );
-    },
+    
     removeSignature(email, x, y) {
       console.log("Removing signature for email:", email, "x:", x, "y:", y);
       this.signaturePositions = this.signaturePositions.filter(
@@ -255,9 +263,7 @@ export default {
       const scaleY = this.canvas.height / canvasRect.height;
 
       this.mouseX = (relativeX * scaleX).toFixed(2);
-      this.mouseY = (this.canvas.height - (relativeY * scaleY) - 70).toFixed(
-        2
-      );
+      this.mouseY = (this.canvas.height - relativeY * scaleY - 70).toFixed(2);
       if (
         this.mouseX <= this.canvas.width - 125 &&
         this.mouseX > -5 &&
