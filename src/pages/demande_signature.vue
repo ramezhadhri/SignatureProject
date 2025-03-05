@@ -1,13 +1,11 @@
 <template>
   <div class="">
-    <h1 class="text-center text-5xl font-bold my-8">Demandez une signature</h1>
+    <!-- <h1 class="text-center text-5xl font-bold my-8">Demandez une signature</h1> -->
     <div class="">
-      <div v-if="currentStep === 0" id="step-0">
-        <div class="flex flex-col justify-center border border-black border-4">
-          <div class="w-full my-8">
-            <!-- Stepper -->
+      <div v-if="currentStep === 0" >
+        <div class="flex flex-col justify-center ">
+          <div class="w-full my-8 ">
             <ul class="relative flex flex-col md:flex-row gap-2 my-4 mx-8">
-              <!-- Item -->
               <li
                 class="md:shrink md:basis-0 flex-1 group flex gap-x-2 md:block"
               >
@@ -32,9 +30,7 @@
                   </p>
                 </div>
               </li>
-              <!-- End Item -->
 
-              <!-- Item -->
               <li
                 class="md:shrink md:basis-0 flex-1 group flex gap-x-2 md:block"
               >
@@ -59,9 +55,7 @@
                   </p>
                 </div>
               </li>
-              <!-- End Item -->
 
-              <!-- Item -->
               <li
                 class="md:shrink md:basis-0 flex-1 group flex gap-x-2 md:block"
               >
@@ -110,9 +104,7 @@
                   </p>
                 </div>
               </li>
-              <!-- End Item -->
             </ul>
-            <!-- End Stepper -->
           </div>
           <div class="block">
             <div class="mx-8">
@@ -125,7 +117,8 @@
               <div class="mx-2 overflow-hidden rounded-xl">
                 <input
                   type="file"
-                  accept="application/pdf" @change="handlepdf"
+                  accept="application/pdf"
+                  @change="handlepdf"
                   class="block w-full text-sm text-gray-500 file:me-4 file:rounded-xl file:py-2 file:border-1 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:disabled:opacity-50 file:disabled:pointer-events-none"
                 />
               </div>
@@ -133,12 +126,10 @@
           </div>
         </div>
       </div>
-      <div v-if="currentStep === 1" id="step-1">
-        <div class="flex flex-col justify-center border border-black border-4">
+      <div v-if="currentStep === 1">
+        <div class="flex flex-col justify-center ">
           <div class="w-full my-8">
-            <!-- Stepper -->
             <ul class="relative flex flex-col md:flex-row gap-2 my-4 mx-8">
-              <!-- Item -->
               <li
                 class="md:shrink md:basis-0 flex-1 group flex gap-x-2 md:block"
               >
@@ -188,9 +179,7 @@
                   </p>
                 </div>
               </li>
-              <!-- End Item -->
 
-              <!-- Item -->
               <li
                 class="md:shrink md:basis-0 flex-1 group flex gap-x-2 md:block"
               >
@@ -239,9 +228,7 @@
                   </p>
                 </div>
               </li>
-              <!-- End Item -->
             </ul>
-            <!-- End Stepper -->
           </div>
           <div class="block">
             <div class="mx-8">
@@ -375,16 +362,13 @@
                   Ajouter Signataire
                 </button>
               </p>
-
-              
             </div>
           </div>
         </div>
       </div>
-      <div v-if="currentStep === 2" id="step-2">
-        <div class="flex flex-col justify-center border border-black border-4">
+      <div v-if="currentStep === 2">
+        <div class="flex flex-col justify-center ">
           <div class="w-full my-8">
-            <!-- Stepper -->
             <ul class="relative flex flex-col md:flex-row gap-2 my-4 mx-8">
               <!-- Item -->
               <li
@@ -491,33 +475,38 @@
               </li>
               <!-- End Item -->
             </ul>
-            <!-- End Stepper -->
           </div>
-          <div class="block border-t border-t-4 border-black">
-            <div class="my-8">
+          <div class="block ">
+            <!-- <div class="my-8">
               <h1 class="text-center text-2xl font-bold">
                 Positionnez les signatures
               </h1>
-            </div>
-            <div class="my-4 w-full flex flex-col  ">
-              <pdfview 
-        :signataires="signataires" 
-        :base64pdf="base64pdf"
-        @signature-positions="handleSignaturePositions"
-      />
-      <!-- <pdfview 
-        
-        :base64pdf="base64pdf"
-        
-      /> -->
+            </div> -->
+            <div class=" relative  w-full flex flex-col">
+              <pdfview
+                :signataires="signataires"
+                :base64pdf="base64pdf"
+                @signature-positions="handleSignaturePositions"
+              />
+              <div class="flex items-center absolute  right-4 bottom-6 bg-gray-100 border border-2 rounded-lg ">
+              
+                <label for="confirmation"
+                  class="mx-2" >Je confirme que les informations sont correctes.</label
+                >
+                <input
+                  type="checkbox"
+                  id="confirmation"
+                  class="mx-4 shrink-0 mt-0.5 border  border-black rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " 
+                  v-model="confirmation"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div v-if="currentStep === 3" id="step-3">
-        <div class="flex flex-col justify-center border border-black border-4">
+      <div v-if="currentStep === 3" >
+        <div class="flex flex-col justify-center ">
           <div class="w-full my-8">
-            <!-- Stepper -->
             <ul class="relative flex flex-col md:flex-row gap-2 my-4 mx-8">
               <!-- Item -->
               <li
@@ -624,7 +613,6 @@
               </li>
               <!-- End Item -->
             </ul>
-            <!-- End Stepper -->
           </div>
           <div class="block">
             <div class="mx-8">
@@ -632,8 +620,7 @@
                 Demandez une signature
               </h1>
             </div>
-            <div class="mx-8 my-4 flex  flex-col justify-center items-center">
-              <!-- ramezhadhri -->
+            <div class="mx-8 my-4 flex flex-col justify-center items-center">
               <div class="border rounded-lg overflow-hidden">
                 <table class="min-w-full divide-y divide-gray-200">
                   <thead class="bg-neutral-700">
@@ -641,7 +628,7 @@
                       <th
                         class="px-6 py-3 text-start text-xs font-medium text-gray-100 uppercase"
                       >
-                        Document 
+                        Document
                       </th>
                       <th
                         class="px-6 py-3 text-start text-xs font-medium text-gray-100 uppercase"
@@ -658,7 +645,6 @@
                       >
                         Email Signataire
                       </th>
-                     
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200">
@@ -666,7 +652,7 @@
                       <td
                         class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800"
                       >
-                       {{fileName}}
+                        {{ fileName }}
                       </td>
                       <td
                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
@@ -676,26 +662,24 @@
                       <td
                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
                       >
-                       {{ row.prenom }}
+                        {{ row.prenom }}
                       </td>
                       <td
                         class="px-6 py-4 whitespace-nowrap text-sm font-medium"
                       >
-                        
-                       {{ row.email }}
+                        {{ row.email }}
                       </td>
-                     
                     </tr>
                   </tbody>
                 </table>
               </div>
               <button
-        class="py-3 px-4  my-8 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#2563eb] text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-     
-      >
-      envoyer 
-       
-      </button> 
+               @click="goToSuiviDocument"
+                class="py-3 px-4 my-8 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#2563eb] text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+              >
+                envoyer
+              </button>
+             
             </div>
           </div>
         </div>
@@ -706,7 +690,7 @@
       <button
         class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
         @click="prevStep"
-        :disabled="currentStep === 0"
+        :disabled="isprevStepDisabled"
       >
         <svg
           class="shrink-0 size-4"
@@ -728,7 +712,7 @@
       <button
         class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#2563eb] text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
         @click="nextStep"
-        :disabled="currentStep === steps.length - 1"
+        :disabled="isNextStepDisabled"
       >
         Etape Suivante
         <svg
@@ -751,13 +735,14 @@
   </div>
 </template>
 
-
 <script>
 import pdfview from "../components/pdfview.vue";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf";
 import pdfWorker from "pdfjs-dist/legacy/build/pdf.worker?url";
 import Pdfview from "../components/pdfview.vue";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+import { useRouter } from 'vue-router';
+
 export default {
   name: "DemandeSignature",
   components: {
@@ -766,50 +751,74 @@ export default {
   data() {
     return {
       currentStep: 0,
-     
-      fileName:"",
-      base64pdf:"",
+
+      fileName: "",
+      base64pdf: "",
       signataires: [{ prenom: "", nom: "", email: "", mobile: "" }],
-      steps: [
-        { id: "step-0" },
-        { id: "step-1" },
-        { id: "step-2" },
-        { id: "step-3" },
-      ],
+    
       signatures: [],
+      confirmation: false,
     };
   },
-
+  computed: {
+    
+    isprevStepDisabled() {
+      if (this.currentStep === 0) {
+        return true;
+      } else if (this.currentStep === 3) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isNextStepDisabled() {
+      if (this.currentStep === 0) {
+        return !this.base64pdf;
+      } else if (this.currentStep === 1) {
+        return !this.isSignatairesValid;
+      } else if (this.currentStep === 2) {
+        return this.signatures.length === 0 || !this.confirmation;
+      } else if (this.currentStep === 3) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isSignatairesValid() {
+      return this.signataires.every(
+        (signataire) => signataire.prenom && signataire.nom && signataire.email
+      );
+    },
+  },
 
   methods: {
-
+    goToSuiviDocument() {
+      this.$router.push('/suivre-document'); 
+    },
     handleSignaturePositions(positions) {
-    this.signatures = positions;
-    console.log("Received Signature Positions:", positions);
-  },
-    async handlepdf(events){ const file = events.target.files[0];
+      this.signatures = positions;
+      console.log("Received Signature Positions:", positions);
+    },
+    async handlepdf(events) {
+      const file = events.target.files[0];
 
-if (file && file.type === "application/pdf") {
-  const reader = new FileReader();
-  this.fileName = file.name;
-  reader.onload = async (e) => {
-    this.base64pdf = e.target.result.split(",")[1];
-    
-   
+      if (file && file.type === "application/pdf") {
+        const reader = new FileReader();
+        this.fileName = file.name;
+        reader.onload = async (e) => {
+          this.base64pdf = e.target.result.split(",")[1];
 
-    console.log(this.base64pdf);
-    
-    
-  };
+          console.log(this.base64pdf);
+        };
 
-  reader.readAsDataURL(file); // retourne application/pdf;base64,base64string
-} else {
-  console.error("Invalid file type. Please upload a PDF.");
-}},
-
+        reader.readAsDataURL(file); // retourne application/pdf;base64,base64string
+      } else {
+        console.error("Type document pas valide ");
+      }
+    },
 
     nextStep() {
-      if (this.currentStep < this.steps.length - 1) {
+      if (this.currentStep < 3) {
         this.currentStep++;
       }
     },
@@ -825,8 +834,5 @@ if (file && file.type === "application/pdf") {
       this.signataires.splice(index, 1);
     },
   },
- 
 };
 </script>
-
-

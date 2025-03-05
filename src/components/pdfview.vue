@@ -1,9 +1,7 @@
 <template>
   <div class="px-20 grid grid-cols-6 gap-2">
     <div class="block col-span-4">
-     
-
-      <canvas ref="canvasRef" @click="mousePosAndAddSignature"></canvas>
+      <canvas ref="canvasRef" class="border border-black border-2"></canvas>
       <div class="flex flex-col items-center jutify-center my-4">
         <div class="flex items-center jutify-center">
           <button
@@ -26,6 +24,7 @@
                 d="M13 5H1m0 0 4 4M1 5l4-4"
               />
             </svg>
+            Précédent
           </button>
           <span class="text-sm text-gray-700">
             Page
@@ -53,6 +52,7 @@
                 d="M1 5h12m0 0L9 1m4 4L9 9"
               />
             </svg>
+            Suivant
           </button>
         </div>
       </div>
@@ -95,11 +95,48 @@
           </button>
         </div>
       </div>
-      <!-- <pre class="mt-4 p-3 bg-gray-100 border rounded">{{ signaturePositions }}</pre> -->
+      <div class="signataires-view col-span-2">
+        <div
+          class="flex flex-col justify-center items-center"
+          :id="divId"
+          :style="divStyle"
+          @mousedown="startDrag"
+          @mousemove="dragDiv"
+          @mouseup="stopDrag"
+          ref="draggableDiv"
+        >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+</svg>
+
+          <h1> signature</h1>
+        </div>
+        <button
+          @click="mousePosAndAddSignature"
+          class="my-4 py-1.5 px-2 inline-flex items-center gap-x-1 text-xs font-medium rounded-full border border-dashed border-gray-200 bg-white text-gray-800 hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
+        >
+          <svg
+            class="shrink-0 size-3.5"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M5 12h14"></path>
+            <path d="M12 5v14"></path>
+          </svg>
+          Ajouter Cette Signature
+        </button>
+
+        <p>x:{{ mouseX }} y:{{ mouseY }}</p>
+      </div>
     </div>
   </div>
-
-  <!-- <pre class="mt-4 p-3 bg-gray-100 border rounded">{{ signaturePositions }}</pre> -->
 </template>
 
 <script>
@@ -117,7 +154,7 @@ export default {
       pdfData: null,
       currentpage: 1,
       totalpages: 1,
-      scale: 1,
+      scale: 0.75,
       canvas: null,
       ctx: null,
       pdf: null,
@@ -126,6 +163,25 @@ export default {
       mouseY: 0,
       signataireView: [],
       signaturePositions: [],
+      estClique: false,
+      positionInitialeX: 0,
+      positionInitialeY: 0,
+      offsetX: 0,
+      offsetY: 0,
+      x: 0,
+      y: 0,
+      divStyle: {
+        width: "130px",
+        height: "70px",
+        backgroundColor: "rgba(240, 240, 240, 0.8)",
+        boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.3)",
+        border: "2px solid black",
+        position: "absolute",
+        bottom: "150px",
+        right: "50px",
+        cursor: "grab",
+      },
+      selectedSignataire: null,  
     };
   },
   mounted() {
@@ -133,40 +189,95 @@ export default {
     this.ctx = this.canvas.getContext("2d");
     this.loadPdf(this.base64pdf);
     this.loadSignataires();
+    this.expliquer();
+  },
+  watch: {
+    signataireView: {
+      immediate: true,  
+      handler(newSignataireView) {
+        if (newSignataireView && newSignataireView.length > 0) {
+          this.selectedSignataire = newSignataireView[0];  
+        }
+      },
+    },
   },
   methods: {
-   
+    expliquer() {
+      alert(
+        "Pour ajouter une signature, vous devez:\n 1: Choisir un destinataire\n 2: Placer une signature\n 3: Cliquez sur Ajouter pour enregistrer cette position"
+      );
+    },
     removeSignature(email, x, y) {
-  console.log("Removing signature for email:", email, "x:", x, "y:", y);
-  this.signaturePositions = this.signaturePositions.filter(
-    (signature) =>
-      signature.email !== email || signature.x !== x || signature.y !== y
-  );
-  console.log("Updated signature positions:", this.signaturePositions);
-},
+      console.log("Removing signature for email:", email, "x:", x, "y:", y);
+      this.signaturePositions = this.signaturePositions.filter(
+        (signature) =>
+          signature.email !== email || signature.x !== x || signature.y !== y
+      );
+      console.log("Signatures:", this.signaturePositions);
+    },
 
-    mousePosAndAddSignature(event) {
-      const rect = this.canvas.getBoundingClientRect();
-      const scaleX = this.canvas.width / rect.width;
-      const scaleY = this.canvas.height / rect.height;
+    startDrag(e) {
+      this.estClique = true;
+      this.offsetX = e.clientX - this.$refs.draggableDiv.offsetLeft;
+      this.offsetY = e.clientY - this.$refs.draggableDiv.offsetTop;
+      this.divStyle.cursor = "grabbing";
+    },
 
-      this.mouseX = ((event.clientX - rect.left) * scaleX).toFixed(2);
-      this.mouseY = (
-        this.canvas.height -
-        (event.clientY - rect.top) * scaleY
-      ).toFixed(2);
+    stopDrag() {
+      this.estClique = false;
+      this.divStyle.cursor = "grab";
+    },
 
-      if (this.selectedSignataire) {
-        this.signaturePositions.push({
-          email: this.selectedSignataire.email,
-          nom: this.selectedSignataire.nom,
-          prenom: this.selectedSignataire.prenom,
-          page: this.currentpage,
-          x: this.mouseX,
-          y: this.mouseY,
-        });
-        console.log("Signature added:", this.signaturePositions);
-        this.$emit("signature-positions", this.signaturePositions);
+    dragDiv(e) {
+      if (!this.estClique) return;
+
+      const newX = e.clientX - this.offsetX;
+      const newY = e.clientY - this.offsetY;
+
+      this.divStyle = {
+        ...this.divStyle,
+        left: `${newX}px`,
+        top: `${newY}px`,
+      };
+
+      this.currentX = newX;
+      this.currentY = newY;
+    },
+
+    mousePosAndAddSignature() {
+      const canvasRect = this.$refs.canvasRef.getBoundingClientRect();
+      const divRect = this.$refs.draggableDiv.getBoundingClientRect();
+
+      const relativeX = divRect.left - canvasRect.left;
+      const relativeY = divRect.top - canvasRect.top;
+
+      const scaleX = this.canvas.width / canvasRect.width;
+      const scaleY = this.canvas.height / canvasRect.height;
+
+      this.mouseX = (relativeX * scaleX).toFixed(2);
+      this.mouseY = (this.canvas.height - (relativeY * scaleY) - 70).toFixed(
+        2
+      );
+      if (
+        this.mouseX <= this.canvas.width - 125 &&
+        this.mouseX > -5 &&
+        this.mouseY > -5 &&
+        this.mouseY <= this.canvas.height - 65
+      ) {
+        if (this.selectedSignataire) {
+          this.signaturePositions.push({
+            email: this.selectedSignataire.email,
+            nom: this.selectedSignataire.nom,
+            prenom: this.selectedSignataire.prenom,
+            page: this.currentpage,
+            x: parseFloat(this.mouseX),
+            y: parseFloat(this.mouseY),
+          });
+
+          this.$emit("signature-positions", this.signaturePositions);
+        }
+      } else {
+        alert("ne depassez pas le cadre de pdf");
       }
     },
     async loadSignataires() {
@@ -179,7 +290,6 @@ export default {
 
     async loadPdf(pdfdoc) {
       try {
-        //convertir chanine de base 64 to chaine binaire
         this.pdfData = atob(pdfdoc);
         console.log("base64 to atob" + this.pdfData);
         pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
@@ -231,22 +341,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.pdf-container {
-  text-align: center;
-  padding: 20px;
-}
-canvas {
-  border: 1px solid #ccc;
-  margin-top: 10px;
-  cursor: crosshair;
-}
-.controls {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-button {
-  margin: 0 5px;
-}
-</style>
+<style scoped></style>
