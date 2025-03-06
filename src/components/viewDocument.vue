@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <div class="mx-auto flex items-center justify-center my-2">
+  <div class="">
+    <router-link  to="/signer" class=" border border-black px-2 rounded-xl text-black flex absolute top-20 left-46"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+</svg>
+    page précedente </router-link>
+    <div class="mx-auto flex items-center justify-center my-2 ">
       <button
         @click="prevPage"
         :disabled="currentpage <= 1"
@@ -82,7 +86,8 @@
           ref="pinInput"
         />
       </div>
-      <button @click="addImageToPdf" class="py-2 px-4 bg-yellow-500 ">Valider</button>
+      <button @click="addImageToPdf" class="py-2 px-4 bg-yellow-500 my-2">Valider</button>
+      <button @click="pin=false" class="py-2 px-4 bg-blue-500 ">back</button>
     </div>
     <div
      v-show="rejet" class="bg-gray-100 flex flex-col justify-center py-8 w-1/3 mx-auto my-8 border border-black border-2 px-8"
@@ -93,7 +98,8 @@
       
         <Textarea class="my-4"></Textarea>
       
-      <button @click="rejeter" class="py-2 px-4 bg-red-500 ">envoyer</button>
+      <button @click="rejeter" class="py-2 px-4 bg-red-500 my-2 ">envoyer</button>
+      <button @click="rejet=false" class="py-2 px-4 bg-blue-500 ">Back</button>
     </div>
     <div  v-if="!pin && !rejet" class="flex justify-center">
       <button @click="rejet=true" class="py-2 px-12 bg-red-500 text-white my-8 text-lg mx-2">
@@ -146,6 +152,7 @@ export default {
     this.loadPdf();
   },
   methods: {
+    
     rejeter(){
     this.$router.push({ path: `/signer` });
     },
