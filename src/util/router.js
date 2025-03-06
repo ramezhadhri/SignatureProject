@@ -9,6 +9,7 @@ import Signature from "../pages/signature.vue";
 import Digigo from "../pages/digigo.vue";
 import Signer from "../pages/signer.vue";
 import ViewDocument from "../components/viewDocument.vue";
+import Document from "../components/document.vue";
 
 const routes = [
    
@@ -22,9 +23,6 @@ const routes = [
           },{
             path: "/demande_signature",
             component:DemandeSignature ,
-          },{
-            path: "/suivre-document",
-            component:Suivre_document ,
           },{
             path: "/info",
             component:Informations ,
@@ -44,7 +42,11 @@ const routes = [
              path: '/view-document/:id',
              component: ViewDocument,
              props: true 
-          }
+          },{
+            path: '/document/:id',
+            component: Document,
+            props: true 
+         }
         ],
       },
       

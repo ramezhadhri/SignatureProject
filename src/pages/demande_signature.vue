@@ -793,7 +793,7 @@ export default {
 
   methods: {
     goToSuiviDocument() {
-      this.$router.push('/suivre-document'); 
+      this.$router.push('/'); 
     },
     handleSignaturePositions(positions) {
       this.signatures = positions;
