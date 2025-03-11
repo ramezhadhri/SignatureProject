@@ -6,9 +6,94 @@
           Liste des documents à signer
         </h1>
       </div>
+
       <div class="mx-4 my-4 flex flex-col justify-center items-center">
+        <div class="flex justify-between w-3/4">
+  <div class="flex justify-start">
+    <div class="flex justify-start my-4 items-end">
+      <div class="block mx-2">
+        <h1 class="text-gray-500">Date de début:</h1>
+        <input
+          type="date"
+          id="FROM"
+          class="py-2 px-4 block w-full border border-gray-200 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500 text-gray-600"
+        />
+      </div>
+      <div class="block mx-2">
+        <h1 class="text-gray-500">Date de fin:</h1>
+        <input
+          type="date"
+          id="TO"  
+          class="py-2 px-4 block w-full border border-gray-200 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500 text-gray-600"
+        />
+      </div>
+      <div class="flex items-start">
+        <select class="py-3 px-8 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none h-full">
+          <option selected="">Etat</option>
+          <option>signé</option>
+          
+          <option>Pas signé</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  
+    <div class=" flex items-end justify-center my-4 ">
+      <button
+        
+        class="flex items-center justify-center px-3 h-8"
+      >
+        <svg
+          class="w-6 h-6 text-gray-800"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m17 16-4-4 4-4m-6 8-4-4 4-4"
+          />
+        </svg>
+      </button>
+      <span class="text-sm text-gray-700 mx-4 my-2">
+        
+        <span class="font-semibold text-gray-900">5</span>
+        Sur
+        <span class="font-semibold text-gray-900">5</span>
+      </span>
+      <button
+       
+        class="flex items-center justify-center px-3 h-8"
+      >
+        <svg
+          class="w-6 h-6 text-gray-800"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m7 16 4-4-4-4m6 8 4-4-4-4"
+          />
+        </svg>
+      </button>
+    </div>
+  
+</div>
         <div class="border rounded-lg overflow-hidden">
-          <table class="min-w-full divide-y divide-gray-200">
+          <table class="w-full divide-y divide-gray-200">
             <thead class="bg-neutral-700">
               <tr>
                 <th

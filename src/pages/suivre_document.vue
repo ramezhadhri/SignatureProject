@@ -2,9 +2,93 @@
   <div class="flex flex-col justify-center w-full">
     <div class="block">
       <div class="mx-4">
-        <h1 class="text-center text-2xl font-bold">Mes Transactions</h1>
+        <h1 class="text-center text-2xl font-bold">Mes Demandes</h1>
       </div>
       <div class="mx-4 my-4 flex flex-col justify-center items-center">
+        <div class="flex justify-between w-full">
+  <div class="flex justify-start">
+    <div class="flex justify-start my-4 items-end">
+      <div class="block mx-2">
+        <h1 class="text-gray-500">Date de début:</h1>
+        <input
+          type="date"
+          id="FROM"
+          class="py-2 px-4 block w-full border border-gray-200 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500 text-gray-600"
+        />
+      </div>
+      <div class="block mx-2">
+        <h1 class="text-gray-500">Date de fin:</h1>
+        <input
+          type="date"
+          id="TO"  
+          class="py-2 px-4 block w-full border border-gray-200 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500 text-gray-600"
+        />
+      </div>
+      <div class="flex items-start">
+        <select class="py-3 px-8 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none h-full">
+          <option selected="">Etat</option>
+          <option>signé</option>
+          <option>En attente</option>
+          <option>Pas signé</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  
+    <div class=" flex items-end justify-center my-4 ">
+      <button
+        
+        class="flex items-center justify-center px-3 h-8"
+      >
+        <svg
+          class="w-6 h-6 text-gray-800"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m17 16-4-4 4-4m-6 8-4-4 4-4"
+          />
+        </svg>
+      </button>
+      <span class="text-sm text-gray-700 mx-4 my-2">
+        
+        <span class="font-semibold text-gray-900">5</span>
+        Sur
+        <span class="font-semibold text-gray-900">5</span>
+      </span>
+      <button
+       
+        class="flex items-center justify-center px-3 h-8"
+      >
+        <svg
+          class="w-6 h-6 text-gray-800"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m7 16 4-4-4-4m6 8 4-4-4-4"
+          />
+        </svg>
+      </button>
+    </div>
+  
+</div>
         <div class="border rounded-lg overflow-hidden">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-neutral-700">
@@ -63,8 +147,8 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                   <div v-for="(signataire, i) in demande.signataires" :key="i">
-    {{ signataire.fullName }}
-  </div>
+                    {{ signataire.fullName }}
+                  </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                   <div v-for="(signataire, i) in demande.signataires" :key="i">
@@ -75,7 +159,7 @@
                   {{ demande.typeSignature }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button @click="viewDocument(demande.id) ">
+                  <button @click="viewDocument(demande.id)">
                     <span>
                       <svg
                         height="50px"
@@ -170,14 +254,12 @@
                   <button
                     v-if="demande.etat === 'Signé'"
                     class="flex items-center justify-center bg-blue-500 px-4 py-2 rounded text-white"
-                    
                   >
-                    Telecharger  
+                    Telecharger
                   </button>
                   <span v-else class="text-gray-500">Indisponible</span>
                 </td>
               </tr>
-              
             </tbody>
           </table>
         </div>
@@ -200,7 +282,7 @@ export default {
             { fullName: "Hadhri Ramez", email: "hadhriramez@ieee.org" },
             { fullName: "Salma Sellami", email: "salma.sellami@gmail.com" },
           ],
-          id:"1"
+          id: "1",
         },
         {
           date: "2025-03-05",
@@ -210,8 +292,9 @@ export default {
           signataires: [
             { fullName: "Mohamed Ali", email: "mohamed.ali@example.com" },
           ],
-          id:"2"
-        },{
+          id: "2",
+        },
+        {
           date: "2025-03-05",
           pdfname: "Accord-456.pdf",
           typeSignature: "Signature DigiGO",
@@ -219,24 +302,25 @@ export default {
           signataires: [
             { fullName: "Mohamed Ali", email: "mohamed.ali@example.com" },
           ],
-          id:"2"
+          id: "2",
         },
       ],
     };
   },
   methods: {
-    viewDocument(id){
+    viewDocument(id) {
       this.$router.push({ path: `/document/${id}` });
-      },
+    },
     getEtatClass(etat) {
       return {
-        "  mt-3 text-end py-1.5 w-full text-center justify-center px-4 inline-flex items-center gap-x-1 text-xs font-medium rounded-full border border-dashed border-gray-900 bg-green-500 text-gray-100  focus:outline-none": etat === "Signé",
-        "mt-3 text-end py-1.5 px-4 w-full text-center justify-center inline-flex items-center gap-x-1 text-xs font-medium rounded-full border border-dashed border-gray-900 bg-yellow-600 text-gray-100  focus:outline-none": etat === "En attente",
-        "mt-3 text-end py-1.5 px-4 w-full text-center justify-center inline-flex items-center gap-x-1 text-xs font-medium rounded-full border border-dashed border-gray-900 bg-red-600 text-gray-100  focus:outline-none": etat === "Non signé",
+        "  mt-3 text-end py-1.5 w-full text-center justify-center px-4 inline-flex items-center gap-x-1 text-xs font-medium rounded-full border border-dashed border-gray-900 bg-green-500 text-gray-100  focus:outline-none":
+          etat === "Signé",
+        "mt-3 text-end py-1.5 px-4 w-full text-center justify-center inline-flex items-center gap-x-1 text-xs font-medium rounded-full border border-dashed border-gray-900 bg-yellow-600 text-gray-100  focus:outline-none":
+          etat === "En attente",
+        "mt-3 text-end py-1.5 px-4 w-full text-center justify-center inline-flex items-center gap-x-1 text-xs font-medium rounded-full border border-dashed border-gray-900 bg-red-600 text-gray-100  focus:outline-none":
+          etat === "Non signé",
       };
-      
     },
-
   },
 };
 </script>
