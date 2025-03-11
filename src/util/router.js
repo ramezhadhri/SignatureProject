@@ -10,15 +10,19 @@ import Digigo from "../pages/digigo.vue";
 import Signer from "../pages/signer.vue";
 import ViewDocument from "../components/viewDocument.vue";
 import Document from "../components/document.vue";
+import Welcomepage from "../pages/Welcomepage.vue";
+import Signup from "../pages/signup.vue";
+import Login from "../pages/login.vue";
+import Contactus from "../pages/contactus.vue";
 
 const routes = [
    
     {
-        path: "/",
+        path: "/home",
         component: AppLayout,
         children: [
           {
-            path: "",
+            path: "/home",
             component: HomePage, 
           },{
             path: "/demande_signature",
@@ -46,9 +50,25 @@ const routes = [
             path: '/document/:id',
             component: Document,
             props: true 
-         }
+         },{
+          path: '/contactus',
+          component: Contactus,
+          props: true 
+       }
         ],
       },
+      {
+        path: "/",
+        component: Welcomepage,
+      },
+      {
+        path: "/signup",
+        component: Signup,
+      },
+      {
+        path: "/login",
+        component: Login,
+      }
       
  
 ];

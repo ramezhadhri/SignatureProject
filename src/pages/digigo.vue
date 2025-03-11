@@ -54,10 +54,10 @@
         />
       </svg>
       <p class="mb-2 text-sm text-gray-500">
-        <span class="font-semibold">Click to upload</span> or drag and drop
+        <span class="font-semibold">importer la photo de votre piéce d'identité</span> 
       </p>
       <p class="text-xs text-gray-500">
-        SVG, PNG, JPG, JPEG (MAX. 800x400px)
+         PNG, JPG, JPEG 
       </p>
     </div>
     

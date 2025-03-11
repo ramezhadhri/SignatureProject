@@ -98,7 +98,7 @@
       </div>
       <div class="signataires-view col-span-2">
         <div
-          class="flex flex-col justify-center items-center"
+          class="flex flex-col justify-center items-center no-select"
           :id="divId"
           :style="divStyle"
           @mousedown="startDrag"
@@ -145,7 +145,7 @@
           Ajouter Cette Signature
         </button>
 
-        <!-- <p>x:{{ mouseX }} y:{{ mouseY }}</p> -->
+        <p>x:{{ mouseX }} y:{{ mouseY }}</p>
       </div>
     </div>
   </div>
@@ -347,4 +347,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+  .no-select {
+    user-select: none; 
+    -webkit-user-select: none;
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+  }
+  </style>

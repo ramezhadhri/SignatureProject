@@ -169,14 +169,15 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button
                     v-if="demande.etat === 'Signé'"
-                    class="flex items-center justify-center"
+                    class="flex items-center justify-center bg-blue-500 px-4 py-2 rounded text-white"
                     
                   >
-                    <img src="../assets/gradient_star_award_ribbon.jpg" class="h-12"/>
+                    Telecharger  
                   </button>
                   <span v-else class="text-gray-500">Indisponible</span>
                 </td>
               </tr>
+              
             </tbody>
           </table>
         </div>
