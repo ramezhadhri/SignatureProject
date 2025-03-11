@@ -488,18 +488,19 @@
                 :base64pdf="base64pdf"
                 @signature-positions="handleSignaturePositions"
               />
-              <div class="flex items-center absolute  right-4 bottom-6 bg-gray-100 border border-2 rounded-lg ">
+              <div class="flex items-center justify-end"> <div class="flex items-center justify-end w-1/3  bg-gray-100 border border-2 rounded-lg ">
               
-                <label for="confirmation"
-                  class="mx-2" >Je confirme que les informations sont correctes.</label
-                >
-                <input
-                  type="checkbox"
-                  id="confirmation"
-                  class="mx-4 shrink-0 mt-0.5 border  border-black rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " 
-                  v-model="confirmation"
-                />
-              </div>
+              <label for="confirmation"
+                class="mx-2" >Je confirme que les informations sont correctes.</label
+              >
+              <input
+                type="checkbox"
+                id="confirmation"
+                class="mx-4 shrink-0 mt-0.5 border  border-black rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " 
+                v-model="confirmation"
+              />
+            </div></div>
+             
             </div>
           </div>
         </div>
@@ -800,7 +801,7 @@ export default {
 
   methods: {
     goToSuiviDocument() {
-      this.$router.push('/'); 
+      this.$router.push('/home'); 
     },
     handleSignaturePositions(positions) {
       this.signatures = positions;

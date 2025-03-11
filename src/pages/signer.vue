@@ -9,89 +9,83 @@
 
       <div class="mx-4 my-4 flex flex-col justify-center items-center">
         <div class="flex justify-between w-3/4">
-  <div class="flex justify-start">
-    <div class="flex justify-start my-4 items-end">
-      <div class="block mx-2">
-        <h1 class="text-gray-500">Date de début:</h1>
-        <input
-          type="date"
-          id="FROM"
-          class="py-2 px-4 block w-full border border-gray-200 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500 text-gray-600"
-        />
-      </div>
-      <div class="block mx-2">
-        <h1 class="text-gray-500">Date de fin:</h1>
-        <input
-          type="date"
-          id="TO"  
-          class="py-2 px-4 block w-full border border-gray-200 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500 text-gray-600"
-        />
-      </div>
-      <div class="flex items-start">
-        <select class="py-3 px-8 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none h-full">
-          <option selected="">Etat</option>
-          <option>signé</option>
-          
-          <option>Pas signé</option>
-        </select>
-      </div>
-    </div>
-  </div>
-  
-    <div class=" flex items-end justify-center my-4 ">
-      <button
-        
-        class="flex items-center justify-center px-3 h-8"
-      >
-        <svg
-          class="w-6 h-6 text-gray-800"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="m17 16-4-4 4-4m-6 8-4-4 4-4"
-          />
-        </svg>
-      </button>
-      <span class="text-sm text-gray-700 mx-4 my-2">
-        
-        <span class="font-semibold text-gray-900">5</span>
-        Sur
-        <span class="font-semibold text-gray-900">5</span>
-      </span>
-      <button
-       
-        class="flex items-center justify-center px-3 h-8"
-      >
-        <svg
-          class="w-6 h-6 text-gray-800"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="m7 16 4-4-4-4m6 8 4-4-4-4"
-          />
-        </svg>
-      </button>
-    </div>
-  
-</div>
+          <div class="flex justify-start">
+            <div class="flex justify-start my-4 items-end">
+              <div class="block mx-2">
+                <h1 class="text-gray-500">Date de début:</h1>
+                <input
+                  type="date"
+                  id="FROM"
+                  class="py-2 px-4 block w-full border border-gray-200 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500 text-gray-600"
+                  @change="onFromDateChange($event.target.value)"
+                />
+              </div>
+              <div class="block mx-2">
+                <h1 class="text-gray-500">Date de fin:</h1>
+                <input
+                  type="date"
+                  id="TO"
+                  class="py-2 px-4 block w-full border border-gray-200 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500 text-gray-600"
+                  @change="onToDateChange($event.target.value)"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class=" flex items-end justify-center my-4 ">
+            <button
+              @click="goToPreviousPage"
+              :disabled="currentPage === 1"
+              class="flex items-center justify-center px-3 h-8"
+              :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
+            >
+              <svg
+                class="w-6 h-6 text-gray-800"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m17 16-4-4 4-4m-6 8-4-4 4-4"
+                />
+              </svg>
+            </button>
+            <span class="text-sm text-gray-700 mx-4 my-2">
+              {{ currentPage }} sur {{ totalPages }}
+            </span>
+            <button
+              @click="goToNextPage"
+              :disabled="currentPage === totalPages"
+              class="flex items-center justify-center px-3 h-8"
+              :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
+            >
+              <svg
+                class="w-6 h-6 text-gray-800"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m7 16 4-4-4-4m6 8 4-4-4-4"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
         <div class="border rounded-lg overflow-hidden">
           <table class="w-full divide-y divide-gray-200">
             <thead class="bg-neutral-700">
@@ -129,7 +123,7 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-              <tr v-for="(demande, index) in demandes" :key="index">
+              <tr v-for="(demande, index) in paginatedDemandes" :key="index">
                 <td
                   class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800"
                 >
@@ -150,7 +144,7 @@
                   {{ demande.email }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button @click="viewDocument(demande.id) ">
+                  <button @click="viewDocument(demande.id)">
                     <span>
                       <svg
                         height="50px"
@@ -239,11 +233,15 @@
               </tr>
             </tbody>
           </table>
+            <div v-if="filteredDemandes.length === 0" class="text-center py-4">
+                Aucun document ne correspond aux critères de recherche.
+            </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 export default {
   name: "Signer",
@@ -257,14 +255,57 @@ export default {
           name: "Hadhri Ramez",
           email: "hadhriramez0@gmail.com",
           id: "1",
-        }
+        },
       ],
+      currentPage: 1,
+      itemsPerPage: 5,
+      fromDate: null,
+      toDate: null,
     };
   },
-  methods:{
-    viewDocument(id){
-        this.$router.push({ path: `/view-document/${id}` });
-    }
-  }
+  computed: {
+    filteredDemandes() {
+      return this.demandes.filter((demande) => {
+        const dateCondition =
+          (!this.fromDate || demande.date >= this.fromDate) &&
+          (!this.toDate || demande.date <= this.toDate);
+        return dateCondition;
+      }).sort(this.sortByDate);
+    },
+    paginatedDemandes() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.filteredDemandes.slice(startIndex, endIndex);
+    },
+    totalPages() {
+      return Math.ceil(this.filteredDemandes.length / this.itemsPerPage);
+    },
+  },
+  methods: {
+    viewDocument(id) {
+      this.$router.push({ path: `/view-document/${id}` });
+    },
+    onFromDateChange(date) {
+      this.fromDate = date;
+      this.currentPage = 1;
+    },
+    onToDateChange(date) {
+      this.toDate = date;
+      this.currentPage = 1;
+    },
+    goToPreviousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    goToNextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+     sortByDate(a, b) {
+      return new Date(b.date) - new Date(a.date);
+    },
+  },
 };
 </script>

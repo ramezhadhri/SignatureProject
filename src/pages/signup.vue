@@ -1,6 +1,6 @@
 <template>
   <div class=" h-full grid grid-cols-12  ">
-    <div class="col-span-6 flex flex-col justify-center  ">
+    <div class="col-span-6 flex flex-col   ">
       <div class="flex justify-center">
         <router-link to="/" class="text-7xl  font-bold text-gray-600 text-center mb-4">
           Elise<span class="text-yellow-500">SIGN</span>
@@ -157,7 +157,7 @@
         </form>
       </div>
     </div>
-    <div class="col-span-6 flex flex-col justify-center  bg-gray-200 px-4 h-full w-full">
+    <div class="col-span-6 flex flex-col justify-center  bg-gray-200 px-4 h-full min-h-screen w-full">
       <img src="https://i.imgur.com/xjnKQW6.png" alt="" class="">
     </div>
   </div>
