@@ -107,7 +107,6 @@
       </div>
 
       <div class="signataires-view col-span-2">
-        <!-- Affichage des signatures fixes (conditionnelles) -->
         <div
           v-for="(signature, index) in signatureDivs"
           :key="index"
@@ -133,12 +132,11 @@
             />
           </svg>
           <h1>signature</h1>
-          <span class="signature-count">
+          <span class="absolute top-2 right-2 text-sm">
             {{ index + 1 }}
           </span>
         </div>
 
-        <!-- Div de signature mobile (modèle) -->
         <div
           class="flex flex-col justify-center items-center no-select"
           :style="divStyle"
@@ -221,15 +219,26 @@ export default {
       estClique: false,
       offsetX: 0,
       offsetY: 0,
-      divStyle: {
+      initialDivStyle: { 
         width: "130px",
         height: "70px",
         backgroundColor: "rgba(240, 240, 240, 0.8)",
         boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.3)",
         border: "2px solid black",
         position: "absolute",
-        bottom: "150px",
-        right: "50px",
+        top: "70px",
+        right: "500px",
+        cursor: "grab",
+      },
+      divStyle: { 
+        width: "130px",
+        height: "70px",
+        backgroundColor: "rgba(240, 240, 240, 0.8)",
+        boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.3)",
+        border: "2px solid black",
+        position: "absolute",
+        top: "70px",
+        right: "500px",
         cursor: "grab",
       },
       selectedSignataire: null,
@@ -253,20 +262,20 @@ export default {
     },
   },
   methods: {
-      removeSignature(email, x, y, index) {
-        console.log(index)
-        const indexToRemove = this.signatureDivs.findIndex(
-          (s) => s.email === email && s.x === x && s.y === y
-        );
-        if (indexToRemove !== -1) {
-          this.signatureDivs.splice(indexToRemove, 1);
-        }
-        const indexToRemoveSignatures = this.signaturePositions.findIndex(
-          (s) => s.email === email && s.x === x && s.y === y
-        );
-        if (indexToRemoveSignatures !== -1) {
-          this.signaturePositions.splice(indexToRemoveSignatures, 1);
-        }
+    removeSignature(email, x, y, index) {
+      console.log(index)
+      const indexToRemove = this.signatureDivs.findIndex(
+        (s) => s.email === email && s.x === x && s.y === y
+      );
+      if (indexToRemove !== -1) {
+        this.signatureDivs.splice(indexToRemove, 1);
+      }
+      const indexToRemoveSignatures = this.signaturePositions.findIndex(
+        (s) => s.email === email && s.x === x && s.y === y
+      );
+      if (indexToRemoveSignatures !== -1) {
+        this.signaturePositions.splice(indexToRemoveSignatures, 1);
+      }
 
       this.$emit("signature-positions", this.signaturePositions);
     },
@@ -329,11 +338,10 @@ export default {
           this.signatureDivs.push(signatureData);
 
           this.$emit("signature-positions", this.signaturePositions);
-          this.divStyle = {
-            ...this.divStyle,
-            bottom: "150px",
-            right: "50px",
-          };
+
+          // Reset the div's position to its initial state
+          this.divStyle = { ...this.initialDivStyle };  // Use the spread operator to create a copy
+
         }
       } else {
         alert("ne depassez pas le cadre de pdf");
@@ -415,19 +423,17 @@ export default {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
   border: 2px solid black;
   position: absolute;
-  cursor: default; 
+  cursor: default;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.signature-count {
+/* .signature-count {
   position: absolute;
   top: 5px;
   right: 5px;
   font-size: 0.8em;
- 
-
-}
+} */
 </style>

@@ -7,7 +7,9 @@
           <input type="password"
             class="py-2.5 sm:py-3 px-4 block w-full border border-gray-300 rounded-md sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
             placeholder="Mot de passe actuel" />
+            <router-link to="/forgot-password" class="text-blue-500 text-md mt-1 text-start ">Mot de passe oublié ?</router-link>
         </div>
+       
   
   
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

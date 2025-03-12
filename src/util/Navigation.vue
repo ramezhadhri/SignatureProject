@@ -14,7 +14,7 @@
               class="flex flex-col rounded-lg border border-gray-100 p-2  md:mt-0 md:flex-row md:border-0 md:text-sm md:font-medium"
             >
               <li class="mx-4">
-                <div class="relative">
+                <div class="relative" ref="notificationContainer">
                   <button
                     @click="toggleDropdown"
                     class="relative inline-flex items-center p-3 text-sm font-medium text-center text-white  rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300  "
@@ -131,7 +131,7 @@
 <script>
 import { RouterLink } from "vue-router";
 import { ChevronDownIcon } from "@heroicons/vue/24/outline";
-import { h } from "vue";
+
 //import NavModal from "../components/NavModal.vue";
 
 export default {
@@ -144,8 +144,8 @@ export default {
       email: "hadhriramez0@gmail.com",
       isDropdownOpen: false,
       notifications: [
-        "nouveau document à signer de Hadhri Ramez",
-        
+        " Hadhri Ramez a vous envoyé un document pour le signer"," Hadhri Jasser a vous envoyé un document pour le signer",
+
       ],
     };
   },
@@ -172,6 +172,12 @@ export default {
         !this.$refs.dropdownContainer.contains(event.target)
       ) {
         this.profile = false;
+      }
+       if (
+        this.$refs.notificationContainer &&
+        !this.$refs.notificationContainer.contains(event.target)
+      ) {
+        this.isDropdownOpen = false;
       }
     },
     logout() {

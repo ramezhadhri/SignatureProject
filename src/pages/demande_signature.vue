@@ -2,9 +2,9 @@
   <div class="">
     <!-- <h1 class="text-center text-5xl font-bold my-8">Demandez une signature</h1> -->
     <div class="">
-      <div v-if="currentStep === 0" >
-        <div class="flex flex-col justify-center ">
-          <div class="w-full my-8 ">
+      <div v-if="currentStep === 0">
+        <div class="flex flex-col justify-center">
+          <div class="w-full my-8">
             <ul class="relative flex flex-col md:flex-row gap-2 my-4 mx-8">
               <li
                 class="md:shrink md:basis-0 flex-1 group flex gap-x-2 md:block"
@@ -127,7 +127,7 @@
         </div>
       </div>
       <div v-if="currentStep === 1">
-        <div class="flex flex-col justify-center ">
+        <div class="flex flex-col justify-center">
           <div class="w-full my-8">
             <ul class="relative flex flex-col md:flex-row gap-2 my-4 mx-8">
               <li
@@ -367,7 +367,7 @@
         </div>
       </div>
       <div v-if="currentStep === 2">
-        <div class="flex flex-col justify-center ">
+        <div class="flex flex-col justify-center">
           <div class="w-full my-8">
             <ul class="relative flex flex-col md:flex-row gap-2 my-4 mx-8">
               <!-- Item -->
@@ -476,37 +476,39 @@
               <!-- End Item -->
             </ul>
           </div>
-          <div class="block ">
+          <div class="block">
             <!-- <div class="my-8">
               <h1 class="text-center text-2xl font-bold">
                 Positionnez les signatures
               </h1>
             </div> -->
-            <div class=" relative  w-full flex flex-col">
+            <div class="relative w-full flex flex-col">
               <pdfview
                 :signataires="signataires"
                 :base64pdf="base64pdf"
                 @signature-positions="handleSignaturePositions"
               />
-              <div class="flex items-center justify-end"> <div class="flex items-center justify-end w-1/3  bg-gray-100 border border-2 rounded-lg ">
-              
-              <label for="confirmation"
-                class="mx-2" >Je confirme que les informations sont correctes.</label
-              >
-              <input
-                type="checkbox"
-                id="confirmation"
-                class="mx-4 shrink-0 mt-0.5 border  border-black rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " 
-                v-model="confirmation"
-              />
-            </div></div>
-             
+              <div class="flex items-center justify-end">
+                <div
+                  class="flex items-center justify-end w-1/3 bg-gray-100 border border-2 rounded-lg"
+                >
+                  <label for="confirmation" class="mx-2"
+                    >Je confirme que les informations sont correctes.</label
+                  >
+                  <input
+                    type="checkbox"
+                    id="confirmation"
+                    class="mx-4 shrink-0 mt-0.5 border border-black rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                    v-model="confirmation"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div v-if="currentStep === 3" >
-        <div class="flex flex-col justify-center ">
+      <div v-if="currentStep === 3">
+        <div class="flex flex-col justify-center">
           <div class="w-full my-8">
             <ul class="relative flex flex-col md:flex-row gap-2 my-4 mx-8">
               <!-- Item -->
@@ -674,20 +676,27 @@
                   </tbody>
                 </table>
               </div>
-              <h1 class="font-bold my-2 text-lg">choisir le type de signature:</h1>
-          <select class="py-3 px-4 pe-9 block w-1/2 mx-auto bg-gray-100 border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
-  
-  <option selected=""> Signature Simple</option>
-  <option>Signature DigiGo</option>
-  
-</select>
+              <h1 class="font-bold my-2 text-lg">
+                choisir le type de signature:
+              </h1>
+              <select
+                v-model="signaturetype"
+                class="py-3 px-4 pe-9 block w-1/2 mx-auto bg-gray-100 border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+              >
+                <option value="" disabled selected>
+                  Choisir le type de signature
+                </option>
+                <option value="Simple">Signature Simple</option>
+                <option value="Digigo">Signature DigiGo</option>
+              </select>
               <button
-               @click="goToSuiviDocument"
+                @click="goToSuiviDocument"
+                :disabled="!signaturetype"
                 class="py-3 px-4 my-8 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#2563eb] text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               >
                 envoyer
               </button>
-             
+              <!-- <pre>{{ signatures }}</pre> -->
             </div>
           </div>
         </div>
@@ -749,7 +758,7 @@ import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf";
 import pdfWorker from "pdfjs-dist/legacy/build/pdf.worker?url";
 import Pdfview from "../components/pdfview.vue";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 export default {
   name: "DemandeSignature",
@@ -759,17 +768,16 @@ export default {
   data() {
     return {
       currentStep: 0,
-
+      signaturetype: "",
       fileName: "",
       base64pdf: "",
       signataires: [{ prenom: "", nom: "", email: "", mobile: "" }],
-    
+
       signatures: [],
       confirmation: false,
     };
   },
   computed: {
-    
     isprevStepDisabled() {
       if (this.currentStep === 0) {
         return true;
@@ -801,7 +809,7 @@ export default {
 
   methods: {
     goToSuiviDocument() {
-      this.$router.push('/home'); 
+      this.$router.push("/home");
     },
     handleSignaturePositions(positions) {
       this.signatures = positions;
