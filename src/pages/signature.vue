@@ -44,12 +44,12 @@
         </div>
       </div>
   
-      <button
+      <!-- <button
         v-if="!signatureImg"
         class="my-8 px-8 py-4 bg-yellow-600 text-white rounded-md"
       >
         Ajouter Signature
-      </button>
+      </button> -->
   
       
   

@@ -34,7 +34,7 @@
                   <option selected value="Etat">Etat</option>
                   <option value="Signé">Signé</option>
                   <option value="En attente">En attente</option>
-                  <option value="Non signé">Non signé</option>
+                  <option value="Rejeté">Rejeté</option>
                 </select>
               </div>
             </div>
@@ -251,7 +251,12 @@
                   </button>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <span :class="getEtatClass(demande.etat)">
+                  <span  :class="{
+                    'text-green-500': demande.etat === 'Signé',
+                    'text-red-500': demande.etat === 'Rejeté',
+                    'text-gray-800':demande.etat === 'En attente ',
+                     
+                  }">
                     {{ demande.etat }}
                   </span>
                 </td>
@@ -306,7 +311,7 @@ export default {
     "date": "2025-03-03",
     "pdfname": "Contrat-103.pdf",
     "typeSignature": "Signature Simple",
-    "etat": "Non signé",
+    "etat": "Rejeté",
     "signataires": [
       { "fullName": "Hadhri Ramez", "email": "hadhriramez@ieee.org" },
       { "fullName": "Jasser Hadhri", "email": "Jasserhadhri@gmail.com" }
@@ -348,7 +353,7 @@ export default {
     "date": "2025-03-07",
     "pdfname": "Contrat-107.pdf",
     "typeSignature": "Signature Digigo",
-    "etat": "En attente",
+    "etat": "Rejeté",
     "signataires": [
       { "fullName": "Jasser Hadhri", "email": "Jasserhadhri@gmail.com" }
     ],
@@ -358,7 +363,7 @@ export default {
     "date": "2025-03-08",
     "pdfname": "Contrat-108.pdf",
     "typeSignature": "Signature Simple",
-    "etat": "Non signé",
+    "etat": "Rejeté",
     "signataires": [
       { "fullName": "Hadhri Ramez", "email": "hadhriramez@ieee.org" }
     ],
@@ -420,18 +425,10 @@ export default {
   },
   methods: {
     viewDocument(id) {
+     
       this.$router.push({ path: `/document/${id}` });
     },
-    getEtatClass(etat) {
-      return {
-        "mt-3 text-end py-1.5 w-full text-center justify-center px-4 inline-flex items-center gap-x-1 text-xs font-medium rounded-full border border-dashed border-gray-900 bg-green-500 text-gray-100  focus:outline-none":
-          etat === "Signé",
-        "mt-3 text-end py-1.5 px-4 w-full text-center justify-center inline-flex items-center gap-x-1 text-xs font-medium rounded-full border border-dashed border-gray-900 bg-yellow-600 text-gray-100  focus:outline-none":
-          etat === "En attente",
-        "mt-3 text-end py-1.5 px-4 w-full text-center justify-center inline-flex items-center gap-x-1 text-xs font-medium rounded-full border border-dashed border-gray-900 bg-red-600 text-gray-100  focus:outline-none":
-          etat === "Non signé",
-      };
-    },
+   
     goToPreviousPage() {
       if (this.currentPage > 1) {
         this.currentPage--;

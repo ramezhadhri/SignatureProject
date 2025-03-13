@@ -307,46 +307,64 @@ export default {
       this.mouseY = newY;
     },
     addSignature() {
-      const canvasRect = this.$refs.canvasRef.getBoundingClientRect();
-      const divRect = this.$refs.draggableDiv.getBoundingClientRect();
+  const canvasRect = this.$refs.canvasRef.getBoundingClientRect();
+  const divRect = this.$refs.draggableDiv.getBoundingClientRect();
 
-      const relativeX = divRect.left - canvasRect.left;
-      const relativeY = divRect.top - canvasRect.top;
+  const relativeX = divRect.left - canvasRect.left;
+  const relativeY = divRect.top - canvasRect.top;
 
-      const scaleX = this.canvas.width / canvasRect.width;
-      const scaleY = this.canvas.height / canvasRect.height;
+  const scaleX = this.canvas.width / canvasRect.width;
+  const scaleY = this.canvas.height / canvasRect.height;
 
-      const x = (relativeX * scaleX).toFixed(2);
-      const y = (this.canvas.height - relativeY * scaleY - 70).toFixed(2);
+  const x = (relativeX * scaleX).toFixed(2);
+  const y = (this.canvas.height - relativeY * scaleY - 70).toFixed(2);
 
-      if (
-        x <= this.canvas.width - 125 &&
-        x > -5 &&
-        y > -5 &&
-        y <= this.canvas.height - 65
-      ) {
-        if (this.selectedSignataire) {
-          const signatureData = {
-            email: this.selectedSignataire.email,
-            nom: this.selectedSignataire.nom,
-            prenom: this.selectedSignataire.prenom,
-            page: this.currentpage,
-            x: parseFloat(this.mouseX),
-            y: parseFloat(this.mouseY),
-          };
-          this.signaturePositions.push(signatureData);
-          this.signatureDivs.push(signatureData);
+  if (
+    x <= this.canvas.width - 125 &&
+    x > -5 &&
+    y > -5 &&
+    y <= this.canvas.height - 65
+  ) {
+    if (this.selectedSignataire) {
+      
+      let signataireEntry = this.signaturePositions.find(
+        (entry) => entry.email === this.selectedSignataire.email
+      );
 
-          this.$emit("signature-positions", this.signaturePositions);
-
-          // Reset the div's position to its initial state
-          this.divStyle = { ...this.initialDivStyle };  // Use the spread operator to create a copy
-
-        }
-      } else {
-        alert("ne depassez pas le cadre de pdf");
+      if (!signataireEntry) {
+        
+        signataireEntry = {
+          email: this.selectedSignataire.email,
+          positions: [],
+        };
+        this.signaturePositions.push(signataireEntry);
       }
-    },
+
+      
+      signataireEntry.positions.push({
+        pageNumber: this.currentpage,
+        x: parseFloat(x),
+        y: parseFloat(y),
+      });
+
+      
+      this.signatureDivs.push({
+        email: this.selectedSignataire.email,
+        nom: this.selectedSignataire.nom,
+        prenom: this.selectedSignataire.prenom,
+        page: this.currentpage,
+        x: parseFloat(this.mouseX),
+        y: parseFloat(this.mouseY),
+      });
+
+      this.$emit("signature-positions", this.signaturePositions);
+    }
+
+    // Reset the div's position to its initial state
+    this.divStyle = { ...this.initialDivStyle };
+  }
+},
+
     async loadSignataires() {
       if (this.signataires && Array.isArray(this.signataires)) {
         this.signataireView = this.signataires;

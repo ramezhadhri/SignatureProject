@@ -29,10 +29,21 @@
                   @change="onToDateChange($event.target.value)"
                 />
               </div>
+              <div class="flex items-start">
+                <select
+                  class="py-3 px-8 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none h-full"
+                  @change="onStatusChange($event.target.value)"
+                >
+                  <option selected value="Tous">Tous</option>
+                  <option value="Signé">Signé</option>
+                  <option value="Rejeté">Rejeté</option>
+                  <option value="Non traité">Non traité</option>
+                </select>
+              </div>
             </div>
           </div>
 
-          <div class=" flex items-end justify-center my-4 ">
+          <div class="flex items-end justify-center my-4">
             <button
               @click="goToPreviousPage"
               :disabled="currentPage === 1"
@@ -64,7 +75,9 @@
               @click="goToNextPage"
               :disabled="currentPage === totalPages"
               class="flex items-center justify-center px-3 h-8"
-              :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
+              :class="{
+                'opacity-50 cursor-not-allowed': currentPage === totalPages,
+              }"
             >
               <svg
                 class="w-6 h-6 text-gray-800"
@@ -118,6 +131,11 @@
                 <th
                   class="px-6 py-3 text-start text-xs font-medium text-gray-100 uppercase"
                 >
+                  ETAT
+                </th>
+                <th
+                  class="px-6 py-3 text-start text-xs font-medium text-gray-100 uppercase"
+                >
                   Voir Document
                 </th>
               </tr>
@@ -143,8 +161,18 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   {{ demande.email }}
                 </td>
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+                  :class="{
+                    'text-green-500': demande.etat === 'Signé',
+                    'text-red-500': demande.etat === 'Rejeté',
+                    'text-gray-800': demande.etat === 'Non traité', 
+                  }"
+                >
+                  {{ demande.etat }}
+                </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button @click="viewDocument(demande.id)">
+                  <button @click="viewDocument(demande.id, demande.etat)">
                     <span>
                       <svg
                         height="50px"
@@ -233,9 +261,9 @@
               </tr>
             </tbody>
           </table>
-            <div v-if="filteredDemandes.length === 0" class="text-center py-4">
-                Aucun document ne correspond aux critères de recherche.
-            </div>
+          <div v-if="filteredDemandes.length === 0" class="text-center py-4">
+            Aucun document ne correspond aux critères de recherche.
+          </div>
         </div>
       </div>
     </div>
@@ -247,103 +275,129 @@ export default {
   name: "Signer",
   data() {
     return {
-      demandes:  [
-  {
-    "date": "2025-03-01",
-    "time": "08:30",
-    "document": "contrat-101.pdf",
-    "name": "Hadhri Ramez",
-    "email": "hadhriramez0@gmail.com",
-    "id": "1"
-  },
-  {
-    "date": "2025-03-02",
-    "time": "10:15",
-    "document": "contrat-102.pdf",
-    "name": "Jasser Hadhri",
-    "email": "Jasserhadhri@gmail.com",
-    "id": "2"
-  },
-  {
-    "date": "2025-03-03",
-    "time": "14:20",
-    "document": "contrat-103.pdf",
-    "name": "Hadhri Ramez",
-    "email": "hadhriramez0@gmail.com",
-    "id": "3"
-  },
-  {
-    "date": "2025-03-04",
-    "time": "16:45",
-    "document": "contrat-104.pdf",
-    "name": "Jasser Hadhri",
-    "email": "Jasserhadhri@gmail.com",
-    "id": "4"
-  },
-  {
-    "date": "2025-03-05",
-    "time": "09:00",
-    "document": "contrat-105.pdf",
-    "name": "Hadhri Ramez",
-    "email": "hadhriramez0@gmail.com",
-    "id": "5"
-  },
-  {
-    "date": "2025-03-06",
-    "time": "11:30",
-    "document": "contrat-106.pdf",
-    "name": "Jasser Hadhri",
-    "email": "Jasserhadhri@gmail.com",
-    "id": "6"
-  },
-  {
-    "date": "2025-03-07",
-    "time": "13:10",
-    "document": "contrat-107.pdf",
-    "name": "Hadhri Ramez",
-    "email": "hadhriramez0@gmail.com",
-    "id": "7"
-  },
-  {
-    "date": "2025-03-08",
-    "time": "18:25",
-    "document": "contrat-108.pdf",
-    "name": "Jasser Hadhri",
-    "email": "Jasserhadhri@gmail.com",
-    "id": "8"
-  },
-  {
-    "date": "2025-03-09",
-    "time": "20:50",
-    "document": "contrat-109.pdf",
-    "name": "Hadhri Ramez",
-    "email": "hadhriramez0@gmail.com",
-    "id": "9"
-  },
-  {
-    "date": "2025-03-10",
-    "time": "22:10",
-    "document": "contrat-110.pdf",
-    "name": "Jasser Hadhri",
-    "email": "Jasserhadhri@gmail.com",
-    "id": "10"
-  }
-],
+      demandes: [
+        {
+          date: "2025-03-01",
+          time: "08:30",
+          document: "contrat-101.pdf",
+          name: "Hadhri Ramez",
+          email: "hadhriramez0@gmail.com",
+          id: "1",
+          etat: "Signé",
+        },
+        {
+          date: "2025-03-12",
+          time: "10:15",
+          document: "contrat-102.pdf",
+          name: "Jasser Hadhri",
+          email: "Jasserhadhri@gmail.com",
+          id: "2",
+          etat: "Rejeté",
+        },
+        {
+          date: "2025-03-03",
+          time: "14:20",
+          document: "contrat-103.pdf",
+          name: "Hadhri Ramez",
+          email: "hadhriramez0@gmail.com",
+          id: "3",
+          etat: "Non traité",
+        },
+        {
+          date: "2025-03-15",
+          time: "16:45",
+          document: "contrat-104.pdf",
+          name: "Jasser Hadhri",
+          email: "Jasserhadhri@gmail.com",
+          id: "4",
+          etat: "Signé",
+        },
+        {
+          date: "2025-03-05",
+          time: "09:00",
+          document: "contrat-105.pdf",
+          name: "Hadhri Ramez",
+          email: "hadhriramez0@gmail.com",
+          id: "5",
+          etat: "Rejeté",
+        },
+        {
+          date: "2025-03-17",
+          time: "11:30",
+          document: "contrat-106.pdf",
+          name: "Jasser Hadhri",
+          email: "Jasserhadhri@gmail.com",
+          id: "6",
+          etat: "Non traité",
+        },
+        {
+          date: "2025-03-07",
+          time: "13:10",
+          document: "contrat-107.pdf",
+          name: "Hadhri Ramez",
+          email: "hadhriramez0@gmail.com",
+          id: "7",
+          etat: "Signé",
+        },
+        {
+          date: "2025-03-19",
+          time: "18:25",
+          document: "contrat-108.pdf",
+          name: "Jasser Hadhri",
+          email: "Jasserhadhri@gmail.com",
+          id: "8",
+          etat: "Rejeté",
+        },
+        {
+          date: "2025-03-09",
+          time: "20:50",
+          document: "contrat-109.pdf",
+          name: "Hadhri Ramez",
+          email: "hadhriramez0@gmail.com",
+          id: "9",
+          etat: "Non traité",
+        },
+        {
+          date: "2025-03-20",
+          time: "22:10",
+          document: "contrat-110.pdf",
+          name: "Jasser Hadhri",
+          email: "Jasserhadhri@gmail.com",
+          id: "10",
+          etat: "Signé",
+        },
+      ],
 
       currentPage: 1,
       itemsPerPage: 5,
       fromDate: null,
       toDate: null,
+      selectedStatus: "Tous",
     };
   },
   computed: {
     filteredDemandes() {
-      return this.demandes.filter((demande) => {
+      let filtered = this.demandes.filter((demande) => {
         const dateCondition =
           (!this.fromDate || demande.date >= this.fromDate) &&
           (!this.toDate || demande.date <= this.toDate);
-        return dateCondition;
-      }).sort(this.sortByDate);
+        const statusCondition =
+          this.selectedStatus === "Tous" ||
+          demande.etat === this.selectedStatus;
+        return dateCondition && statusCondition;
+      });
+
+      filtered.sort((a, b) => {
+        if (a.etat === "Non traité" && b.etat !== "Non traité") {
+          return -1;
+        } else if (a.etat !== "Non traité" && b.etat === "Non traité") {
+          return 1;
+        } else {
+          return new Date(b.date) - new Date(a.date);
+        }
+      });
+
+      return filtered;
     },
     paginatedDemandes() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
@@ -355,8 +409,12 @@ export default {
     },
   },
   methods: {
-    viewDocument(id) {
-      this.$router.push({ path: `/view-document/${id}` });
+    viewDocument(id, etat) {
+      if (etat === 'Non traité') {
+        this.$router.push({ path: `/view-document/${id}` });
+      } else {
+        this.$router.push({ path: `/document/${id}` });
+      }
     },
     onFromDateChange(date) {
       this.fromDate = date;
@@ -376,8 +434,10 @@ export default {
         this.currentPage++;
       }
     },
-     sortByDate(a, b) {
-      return new Date(b.date) - new Date(a.date);
+
+    onStatusChange(status) {
+      this.selectedStatus = status;
+      this.currentPage = 1;
     },
   },
 };
