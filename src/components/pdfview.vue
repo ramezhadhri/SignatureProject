@@ -2,7 +2,7 @@
   <div class="px-20 grid grid-cols-6 gap-2">
     <div class="block col-span-4">
       <canvas ref="canvasRef" class="border border-black border-2"></canvas>
-      <div class="flex items-center justify-start my-2 ml-32 ">
+      <div class="flex items-center justify-start my-2 ml-32">
         <button
           @click="prevPage"
           :disabled="currentpage <= 1"
@@ -86,18 +86,11 @@
             </p>
             <p class="font-semibold">Page: {{ signature.page }}</p>
 
-            <p class="font-semibold">
-              Signature: {{ index + 1 }}
-            </p>
+            <p class="font-semibold">Signature: {{ index + 1 }}</p>
           </div>
           <button
             @click="
-              removeSignature(
-                signature.email,
-                signature.x,
-                signature.y,
-                index
-              )
+              removeSignature(signature.email, signature.x, signature.y, index)
             "
             class="px-2 py-1 text-sm text-white bg-red-500 rounded"
           >
@@ -219,7 +212,7 @@ export default {
       estClique: false,
       offsetX: 0,
       offsetY: 0,
-      initialDivStyle: { 
+      initialDivStyle: {
         width: "130px",
         height: "70px",
         backgroundColor: "rgba(240, 240, 240, 0.8)",
@@ -230,7 +223,7 @@ export default {
         right: "500px",
         cursor: "grab",
       },
-      divStyle: { 
+      divStyle: {
         width: "130px",
         height: "70px",
         backgroundColor: "rgba(240, 240, 240, 0.8)",
@@ -263,7 +256,7 @@ export default {
   },
   methods: {
     removeSignature(email, x, y, index) {
-      console.log(index)
+      console.log(index);
       const indexToRemove = this.signatureDivs.findIndex(
         (s) => s.email === email && s.x === x && s.y === y
       );
@@ -307,63 +300,61 @@ export default {
       this.mouseY = newY;
     },
     addSignature() {
-  const canvasRect = this.$refs.canvasRef.getBoundingClientRect();
-  const divRect = this.$refs.draggableDiv.getBoundingClientRect();
+      const canvasRect = this.$refs.canvasRef.getBoundingClientRect();
+      const divRect = this.$refs.draggableDiv.getBoundingClientRect();
 
-  const relativeX = divRect.left - canvasRect.left;
-  const relativeY = divRect.top - canvasRect.top;
+      const relativeX = divRect.left - canvasRect.left;
+      const relativeY = divRect.top - canvasRect.top;
 
-  const scaleX = this.canvas.width / canvasRect.width;
-  const scaleY = this.canvas.height / canvasRect.height;
+      const scaleX = this.canvas.width / canvasRect.width;
+      const scaleY = this.canvas.height / canvasRect.height;
 
-  const x = (relativeX * scaleX).toFixed(2);
-  const y = (this.canvas.height - relativeY * scaleY - 70).toFixed(2);
+      const x = (relativeX * scaleX).toFixed(2);
+      const y = (this.canvas.height - relativeY * scaleY - 70).toFixed(2);
 
-  if (
-    x <= this.canvas.width - 125 &&
-    x > -5 &&
-    y > -5 &&
-    y <= this.canvas.height - 65
-  ) {
-    if (this.selectedSignataire) {
-      
-      let signataireEntry = this.signaturePositions.find(
-        (entry) => entry.email === this.selectedSignataire.email
-      );
+      if (
+        x <= this.canvas.width - 125 &&
+        x > -5 &&
+        y > -5 &&
+        y <= this.canvas.height - 65
+      ) {
+        if (this.selectedSignataire) {
+          let signataireEntry = this.signaturePositions.find(
+            (entry) => entry.email === this.selectedSignataire.email
+          );
 
-      if (!signataireEntry) {
+          if (!signataireEntry) {
+            signataireEntry = {
+              email: this.selectedSignataire.email,
+              positions: [],
+            };
+            this.signaturePositions.push(signataireEntry);
+          }
+
+          signataireEntry.positions.push({
+            pageNumber: this.currentpage,
+            x: parseFloat(x),
+            y: parseFloat(y),
+          });
+
+          this.signatureDivs.push({
+            email: this.selectedSignataire.email,
+            nom: this.selectedSignataire.nom,
+            prenom: this.selectedSignataire.prenom,
+            page: this.currentpage,
+            x: parseFloat(this.mouseX),
+            y: parseFloat(this.mouseY),
+          });
+
+          this.$emit("signature-positions", this.signaturePositions);
+        }
+
         
-        signataireEntry = {
-          email: this.selectedSignataire.email,
-          positions: [],
-        };
-        this.signaturePositions.push(signataireEntry);
+        this.divStyle = { ...this.initialDivStyle };
+      }else{
+        alert("ne depasser pas le pdf");
       }
-
-      
-      signataireEntry.positions.push({
-        pageNumber: this.currentpage,
-        x: parseFloat(x),
-        y: parseFloat(y),
-      });
-
-      
-      this.signatureDivs.push({
-        email: this.selectedSignataire.email,
-        nom: this.selectedSignataire.nom,
-        prenom: this.selectedSignataire.prenom,
-        page: this.currentpage,
-        x: parseFloat(this.mouseX),
-        y: parseFloat(this.mouseY),
-      });
-
-      this.$emit("signature-positions", this.signaturePositions);
-    }
-
-    // Reset the div's position to its initial state
-    this.divStyle = { ...this.initialDivStyle };
-  }
-},
+    },
 
     async loadSignataires() {
       if (this.signataires && Array.isArray(this.signataires)) {

@@ -14,6 +14,7 @@ import Welcomepage from "../pages/Welcomepage.vue";
 import Signup from "../pages/signup.vue";
 import Login from "../pages/login.vue";
 import Contactus from "../pages/contactus.vue";
+import Forgotpassword from "../pages/forgotpassword.vue";
 
 const routes = [
    
@@ -68,6 +69,9 @@ const routes = [
       {
         path: "/login",
         component: Login,
+      },{
+        path: "/forgot-password",
+        component: Forgotpassword,
       }
       
  

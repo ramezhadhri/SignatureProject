@@ -412,7 +412,7 @@ export default {
 
         return dateCondition && statusCondition;
       });
-      return filtered.sort(this.sortByDate);
+      return filtered.sort(this.sortByDate); 
     },
     paginatedDemandes() {
       const startIndex = (this.currentPage - 1) * this.itemsParPage;
