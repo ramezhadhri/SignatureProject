@@ -1,7 +1,7 @@
 <template>
     <nav class="rounded border border-gray-200 bg-white   ">
       <div class="px-8 w-full flex items-center justify-between">
-        <RouterLink to="/home" class="flex items-center mx-2">
+        <RouterLink to="/" class="flex items-center mx-2">
           <h1 class="text-4xl font-bold text-gray-600">
             Elise<span class="text-yellow-500">SIGN</span>
           </h1>
