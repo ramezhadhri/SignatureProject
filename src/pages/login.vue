@@ -46,9 +46,9 @@
           />
           <router-link to="/forgot-password" class="text-blue-500 text-md mt-1 text-center mt-4">Mot de passe oublié ?</router-link>
 
-          <router-link  to="/home" class="py-2 px-6 bg-yellow-500 text-white text-lg font-bold rounded-lg text-center  mx-auto w-1/2 my-4">
+          <button @click="login" type="submit" class="py-2 px-6 bg-yellow-500 text-white text-lg font-bold rounded-lg text-center  mx-auto w-1/2 my-4">
       Se connecter
-    </router-link>
+    </button>
         </form>
       </div>
     </div>
@@ -60,22 +60,41 @@
   </div>
 </template>
 <script>
-import { RouterLink } from 'vue-router';
+import axios from "axios";
 
 export default {
   name: "Login",
-  data(){
-    return{
-        form: {
-        
-        email: '',
-       
-        password: '',
-      }
-    }
+  data() {
+    return {
+      form: {
+        email: "",
+        password: "",
+      },
+    };
   },
-  methods:{
-   
-  }
+  methods: {
+    async login(event) {
+      event.preventDefault();
+      try {
+        const response = await axios.post("https://localhost:7059/api/Authen/login", {
+          email: this.form.email,
+          password: this.form.password,
+        });
+
+       if (response.status===200 && response.data.token){
+        const token=response.data.token;
+        localStorage.setItem("authToken",token);
+        console.log("token:"+token);
+        // localStorage.removeItem("authToken");
+        this.$router.push("/home");
+       }else {
+          console.error("Login failed. No token received.");
+        }
+      } catch (error) {
+        console.error("Error during login:", error.response?.data || error.message);
+      }
+    },
+  },
 };
 </script>
+

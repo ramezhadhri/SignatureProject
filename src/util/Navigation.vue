@@ -19,9 +19,20 @@
                     @click="toggleDropdown"
                     class="relative inline-flex items-center p-3 text-sm font-medium text-center text-white  rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300  "
                   >
-                  <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-700">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
-</svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6 text-gray-700"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+                      />
+                    </svg>
 
                     <span class="sr-only">Notifications</span>
                     <div
@@ -45,7 +56,8 @@
                       <li
                         v-for="(notification, index) in notifications"
                         :key="index"
-                        class="px-4 py-2 hover:bg-gray-100 " @click="signepage"
+                        class="px-4 py-2 hover:bg-gray-100 "
+                        @click="signepage"
                       >
                         {{ notification }}
                       </li>
@@ -130,27 +142,28 @@
 
 <script>
 import { RouterLink } from "vue-router";
-import { ChevronDownIcon } from "@heroicons/vue/24/outline";
-
-//import NavModal from "../components/NavModal.vue";
+import { jwtDecode } from "jwt-decode";
 
 export default {
   name: "Navigation",
-  components: { RouterLink, ChevronDownIcon },
+  components: { RouterLink },
   data() {
     return {
       profile: false,
-      fullName: "Hadhri Ramez",
-      email: "hadhriramez0@gmail.com",
+      fullName: "", 
+      email: "",
       isDropdownOpen: false,
       notifications: [
-        " Hadhri Ramez a vous envoyé un document pour le signer"," Hadhri Jasser a vous envoyé un document pour le signer",
-
+        "Hadhri Ramez a vous envoyé un document pour le signer",
+        "Hadhri Jasser a vous envoyé un document pour le signer",
       ],
+      userinfo: null, 
+      token: null
     };
   },
   computed: {
     initials() {
+      if (!this.fullName) return ""; 
       const nameParts = this.fullName.trim().split(" ");
       if (nameParts.length >= 2) {
         return `${nameParts[0][0]}${nameParts[1][0]}`.toUpperCase();
@@ -158,7 +171,40 @@ export default {
       return nameParts[0][0].toUpperCase();
     },
   },
+  mounted() {
+    console.log("Navigation Component mounted");
+    this.token = localStorage.getItem("authToken");
+    this.connecter();
+  },
   methods: {
+    connecter() {
+      console.log("connecter() method called");
+
+      const token = localStorage.getItem("authToken");
+      console.log("Token retrieved from localStorage:", token);
+
+      if (token) {
+        try {
+          this.userinfo = jwtDecode(token);
+          console.log("Decoded userinfo:", this.userinfo);
+
+          
+          this.fullName = this.userinfo.prenom +" "+this.userinfo.nom ;
+          this.email = this.userinfo.email ;
+
+          console.log("FullName:", this.fullName);
+          console.log("Email:", this.email);
+        } catch (error) {
+          console.error("Invalid token:", error);
+          localStorage.removeItem("authToken"); 
+          this.$router.push("/"); 
+        }
+      } else {
+        console.log("No token found in localStorage.");
+        this.$router.push("/"); 
+      }
+    },
+
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
@@ -166,6 +212,7 @@ export default {
     toggleProfile() {
       this.profile = !this.profile;
     },
+
     closeDropdown(event) {
       if (
         this.$refs.dropdownContainer &&
@@ -173,25 +220,25 @@ export default {
       ) {
         this.profile = false;
       }
-       if (
+      if (
         this.$refs.notificationContainer &&
         !this.$refs.notificationContainer.contains(event.target)
       ) {
         this.isDropdownOpen = false;
       }
     },
+
     logout() {
+      localStorage.removeItem("authToken");
       this.$router.push("/");
     },
-    signepage(){
+
+    signepage() {
       this.isDropdownOpen = !this.isDropdownOpen;
       this.$router.push("/signer");
-
     },
   },
-  mounted() {
-    document.addEventListener("click", this.closeDropdown);
-  },
+  
   beforeUnmount() {
     document.removeEventListener("click", this.closeDropdown);
   },

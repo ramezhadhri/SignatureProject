@@ -25,36 +25,47 @@ const routes = [
           {
             path: "/home",
             component: HomePage, 
+            meta: { requiresAuth: true }
           },{
             path: "/demande_signature",
             component:DemandeSignature ,
+            meta: { requiresAuth: true }
           },{
             path: "/info",
             component:Informations ,
+            meta: { requiresAuth: true }
           },{
             path: "/password",
             component:Password ,
+            meta: { requiresAuth: true }
+
           },{
             path: "/signature",
             component:Signature ,
+            meta: { requiresAuth: true }
           },{
             path: "/certifdigigo",
             component:Digigo ,
+            meta: { requiresAuth: true }
           },{
             path: "/signer",
             component:Signer ,
+            meta: { requiresAuth: true }
           },{
              path: '/view-document/:id',
              component: ViewDocument,
-             props: true 
+             props: true ,
+             meta: { requiresAuth: true }
           },{
             path: '/document/:id',
             component: Document,
-            props: true 
+            props: true ,
+            meta: { requiresAuth: true }
          },{
           path: '/contactus',
           component: Contactus,
-          props: true 
+          props: true ,
+          meta: { requiresAuth: true }
        }
         ],
       },
@@ -80,4 +91,17 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("authToken");
+
+  if (to.meta.requiresAuth && !token) {
+    next("/login");  
+  } else if ((to.path === "/login" || to.path === "/signup" || to.path === "/") && token) {
+    next("/home"); 
+  } else {
+    next();
+  }
+});
+
+
 export default router;
