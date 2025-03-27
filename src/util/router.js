@@ -15,6 +15,8 @@ import Signup from "../pages/signup.vue";
 import Login from "../pages/login.vue";
 import Contactus from "../pages/contactus.vue";
 import Forgotpassword from "../pages/forgotpassword.vue";
+import Verfieremail from "../pages/verfieremail.vue";
+import SignerExistant from "../pages/signerExistant.vue";
 
 const routes = [
    
@@ -66,7 +68,12 @@ const routes = [
           component: Contactus,
           props: true ,
           meta: { requiresAuth: true }
-       }
+       },{
+        path: '/signer-existant',
+        component: SignerExistant,
+        props: true ,
+        meta: { requiresAuth: true }
+     }
         ],
       },
       {
@@ -83,6 +90,9 @@ const routes = [
       },{
         path: "/forgot-password",
         component: Forgotpassword,
+      },{
+        path: "/verify-email",
+        component: Verfieremail,
       }
       
  

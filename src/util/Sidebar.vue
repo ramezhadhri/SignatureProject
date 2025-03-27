@@ -7,6 +7,18 @@
             <li>
               <div class="flex flex-col justify-center transition-all duration-75">
                 <router-link
+                  to="/signer-existant"
+                  class="text-center text-md px-4 flex  items-center text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 w-full py-2 h-full"
+                  
+                >
+                <img src="https://i.imgur.com/h6oYtI7.png" class="h-8 mx-2" alt="">
+                   signer
+                </router-link>
+              </div>
+            </li>
+            <li>
+              <div class="flex flex-col justify-center transition-all duration-75">
+                <router-link
                   to="/demande_signature"
                   class="text-center text-md px-4 flex  items-center text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 w-full py-2 h-full"
                   
@@ -16,6 +28,7 @@
                 </router-link>
               </div>
             </li>
+           
             <li>
               <div class="flex flex-col justify-center transition-all duration-75">
                 <router-link
@@ -23,7 +36,7 @@
                   class="text-center text-md px-4 flex  items-center text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 w-full py-2 h-full"
                   
                 >
-                <img src="https://i.imgur.com/h6oYtI7.png" class="h-8 mx-2" alt="">
+                <img src="https://i.imgur.com/sipjAkg.png " class="h-10 mx-2" alt="">
                   Document à signer
                 </router-link>
               </div>
@@ -85,7 +98,7 @@
                     class="text-center text-md px-4 flex  items-center text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 w-full py-2 h-full"
                    
                   >
-                  <img src="https://i.imgur.com/sipjAkg.png" class="h-10 mx-2" alt="">
+                  <img src="https://i.imgur.com/Ykai7eZ.png" class="h-8  mx-2" alt="">
                     Ma signature
                   </router-link>
                   <router-link

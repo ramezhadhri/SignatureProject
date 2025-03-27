@@ -96,7 +96,7 @@
         </div>
         <div class="border rounded-lg overflow-hidden">
           <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-neutral-700">
+            <thead class="bg-[#3498DB]">
               <tr>
                 <th
                   class="px-6 py-3 text-start text-xs font-medium text-gray-100 uppercase"

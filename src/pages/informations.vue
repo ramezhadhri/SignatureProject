@@ -67,7 +67,7 @@
 
 <script>
 import { jwtDecode } from 'jwt-decode';
-
+import axios from "../util/axios"
 export default {
   name: "Information",
   data() {
@@ -75,7 +75,7 @@ export default {
       isEditing: false,
       isDisabled: true,
       isReadonly: true,
-      prenom: "", // Initialize as empty strings to prevent "undefined" in inputs
+      prenom: "", 
       nom: "",
       email: "",
       telephone: "",
@@ -95,15 +95,16 @@ export default {
       const token = localStorage.getItem("authToken");
       if (token) {
         try {
+   
           console.log("token info:" + token);
           this.userinfo = jwtDecode(token);
           console.log("userinfo:" + this.userinfo);
 
           
-          this.email = this.userinfo.email || ""; 
-          this.prenom = this.userinfo.prenom || "";
-          this.nom = this.userinfo.nom || "";
-          this.telephone = this.userinfo.phone || "";
+          this.email = this.userinfo.email || "hadhriramez0@gmail.com"; 
+          this.prenom = this.userinfo.prenom || "ramez";
+          this.nom = this.userinfo.nom || "hadhri";
+          this.telephone = this.userinfo.phone || "52244300";
         } catch (error) {
           console.error("Invalid token:", error);
           localStorage.removeItem("authToken");

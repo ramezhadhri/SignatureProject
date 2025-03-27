@@ -164,6 +164,8 @@
 </template>
 
 <script>
+import axios from "../util/axios.js";
+
 export default {
   name: "Signup",
   data() {
@@ -212,6 +214,7 @@ export default {
 
   },
   methods: {
+   
     onSubmit() {
       
       if (!this.form.nom || !this.form.prenom || !this.form.email || !this.form.telephone || !this.form.dateNaissance || !this.form.sexe) {
@@ -220,8 +223,8 @@ export default {
       }
       this.showPasswordForm = true;
     },
-    register() {
-      
+    async register(event) {
+      event.preventDefault();
       const registrationData = {
         ...this.form,
         password: this.password,
@@ -234,9 +237,30 @@ export default {
 
       
       
-      alert("Inscription réussie!");
+
+   await axios.post("/Authen/Registre", {
+    prenom: this.form.prenom,
+    nom: this.form.nom,
+    email: this.form.email,
+    numeroTel: this.form.telephone,
+    password: this.password,
+    sexe: this.form.sexe,
+    dateOfbirth: this.form.dateNaissance
+})
+.then((response) => {
+    if (response.status === 200) {
+        alert("Email confirmation a ete envoyer a votre  email !");
+        
+    }
+})
+.catch((error) => {
+    console.error("Error during registration:", error);
+    
+});
+
       
-      this.$router.push("/login");
+      
+      //this.$router.push("/login");
     },
     checkPasswordStrength() { 
       const pwd = this.password;

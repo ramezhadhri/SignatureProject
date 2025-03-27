@@ -58,21 +58,21 @@
       </div>
     </div>
     <div class="signataires-view col-span-2">
-      <div class="signataires-view mt-6 p-4 bg-gray-100 rounded-md">
-        <h3 class="text-lg font-semibold mb-2">Choisissez un signataire :</h3>
-        <select v-model="selectedSignataire" class="w-full p-2 border rounded">
-          <option
-            v-for="signataire in signataireView"
-            :key="signataire.email"
-            :value="signataire"
-          >
-            {{ signataire.nom }} {{ signataire.prenom }}
-          </option>
-        </select>
-        <p v-if="selectedSignataire" class="mt-2 text-gray-700">
-          Email: {{ selectedSignataire.email }}
-        </p>
-      </div>
+      <div v-if="signataireView.length > 0 && signataireView.some(s => s.nom || s.prenom || s.email)" class="signataires-view mt-6 p-4 bg-gray-100 rounded-md">
+  <h3 class="text-lg font-semibold mb-2">Choisissez un signataire :</h3>
+  <select v-model="selectedSignataire" class="w-full p-2 border rounded">
+    <option
+      v-for="signataire in signataireView"
+      :key="signataire.email"
+      :value="signataire"
+    >
+      {{ signataire.nom }} {{ signataire.prenom }}
+    </option>
+  </select>
+  <p v-if="selectedSignataire" class="mt-2 text-gray-700">
+    Email: {{ selectedSignataire.email }}
+  </p>
+</div>
       <div class="bg-gray-100 border rounded mt-6 p-4">
         <h3 class="text-lg font-semibold mb-2">Signatures enregistrées :</h3>
         <div

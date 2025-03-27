@@ -274,19 +274,12 @@
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
     <input
       v-model="row.prenom"
-      @click="row.moi = !row.moi"
+      
       type="text"
       class="py-3 px-4 block w-full border border-gray-500 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500"
       placeholder="Prénom Signataire"
     />
-    <button
-     
-      @click="  moisignataire(index)"
-      v-if=" row.moi && row.prenom==='' && row.prenom==='' && row.nom==='' && row.mobile==='' &&shouldShowMoiButton()"
-      class="absolute bg-gray-100 px-12 border border-black mx-2 py-2"
-    >
-      Moi le signataire
-    </button>
+   
   </td>
 
                       <td
@@ -351,7 +344,7 @@
                 <button
                   @click="addRow"
                   class="py-1.5 px-2 inline-flex items-center gap-x-1 text-xs font-medium rounded-full border border-dashed border-gray-200 bg-white text-gray-800 hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
-                  :disabled="this.moilesignataire"
+                 
                 >
                   <svg
                     class="shrink-0 size-3.5"
@@ -635,7 +628,7 @@
             <div class="mx-8 my-4 flex flex-col justify-center items-center">
               <div class="border rounded-lg overflow-hidden">
                 <table class="min-w-full divide-y divide-gray-200">
-                  <thead class="bg-neutral-700">
+                  <thead class="bg-[#3498DB]">
                     <tr>
                       <th
                         class="px-6 py-3 text-start text-xs font-medium text-gray-100 uppercase"
@@ -781,13 +774,13 @@ export default {
   },
   data() {
     return {
-      moilesignataire: false,
+      
       currentStep: 0,
       signaturetype: "",
       fileName: "",
       base64pdf: "",
       signataires: [{ prenom: "", nom: "", email: "", mobile: "" }],
-      moi: false,
+      
       signatures: [],
       confirmation: false,
       positions: [{ pageNumber: 0, x: 57.59, y: 291.37 }],
@@ -827,21 +820,7 @@ export default {
   },
 
   methods: {
-    shouldShowMoiButton() {
-    
-    if (this.signataires.length >= 2) {
-      return false;
-    }else{
-      return true;
-    }},
-    async moisignataire(index) {
-      this.moilesignataire = true;
-      this.signataires[index].prenom = "ramez";
-      this.signataires[index].nom = "hadhri";
-      this.signataires[index].email = "hadhriramez0@gmail.com";
-      this.signataires[index].mobile = "98746945";
-      this.moi = false;
-    },
+  
     async addImageToPdf() {
       try {
         console.log("add image here" + this.base64pdf);
@@ -919,10 +898,10 @@ export default {
       }
     },
     goToSuiviDocument() {
-      if (this.moilesignataire) {
+     
         console.log("base64pdf:" + this.base64pdf);
         this.addImageToPdf();
-      }
+      
       this.$router.push("/home");
     },
     handleSignaturePositions(positions) {
@@ -961,9 +940,7 @@ export default {
       this.signataires.push({ prenom: "", nom: "", email: "", mobile: "" });
     },
     removeRow(index) {
-      if (this.moilesignataire === true) {
-        this.moilesignataire = false;
-      }
+      
       this.signataires.splice(index, 1);
     },
   },

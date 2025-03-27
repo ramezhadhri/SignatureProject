@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import axios from "../util/axios.js";
 
 export default {
   name: "Login",
@@ -76,15 +76,18 @@ export default {
     async login(event) {
       event.preventDefault();
       try {
-        const response = await axios.post("https://localhost:7059/api/Authen/login", {
+        const response = await axios.post("/Authen/login", {
           email: this.form.email,
           password: this.form.password,
         });
 
-       if (response.status===200 && response.data.token){
+       if (response.status===200 && response.data.token ){
         const token=response.data.token;
+        
         localStorage.setItem("authToken",token);
+        
         console.log("token:"+token);
+        
         // localStorage.removeItem("authToken");
         this.$router.push("/home");
        }else {
